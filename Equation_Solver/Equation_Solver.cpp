@@ -8,6 +8,7 @@
 using namespace std;
 
 //Initial changes
+//2
 int main(int argc, char **argv)
 {
 	cout << "Hello" << endl;
