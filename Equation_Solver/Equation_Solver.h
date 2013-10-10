@@ -5,9 +5,25 @@
     Equations consist of: variables expressed as lowercase letters, constants expressed as uppercase letters, numbers expressed in base 10, unary operators, binary operators, and parenthesis.
 */
 
+/*
+ This file, Equation_Solver.h is part of the Equation_Solver source.
+
+ Equation_Solver is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ Equation_Solver is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with Equation_Solver. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef EQUATION_SOLVER_H_
 #define EQUATION_SOLVER_H_
-//temp
 #include <iostream>
 using namespace std;
 // Note: characters get converted to a 128bit-padded-long-double via std::stold.
