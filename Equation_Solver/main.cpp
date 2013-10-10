@@ -1,7 +1,7 @@
 /*! \file main.cpp
     \brief File main.cpp contains the main method of the Equation_Solver program.
 
-    Main is responsible for user input and output and calling the functions defined in Equation_Solver.cpp
+    Main is responsible for user input and output and calling the functions defined in Equation_Solver.cpp .
 */
 
 /*
