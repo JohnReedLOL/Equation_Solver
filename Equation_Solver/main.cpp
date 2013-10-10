@@ -1,10 +1,9 @@
-/*
- * main.cpp
- *
- *  Created on: Oct 10, 2013
- *  Author: John-Michael Reed
- */
- 
+/*! \file main.cpp
+    \brief File main.cpp contains the main method of the Equation_Solver program.
+
+    Main is responsible for user input and output and calling the functions defined in Equation_Solver.cpp
+*/
+
  /*
     This file is part of the Equation_Solver source.
 

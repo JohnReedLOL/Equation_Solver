@@ -1,10 +1,6 @@
-/*
- * Equation_Solver.cpp
- *
- *  Created on: Oct 9, 2013
- *      Author: John-Michael Reed
- */
- 
+/*! \file Equation_Solver.cpp
+ \brief Defines all the methods of the Equation_Solver program except for main.
+*/
  /*
     This file is part of the Equation_Solver source.
 
