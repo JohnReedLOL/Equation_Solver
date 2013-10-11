@@ -19,7 +19,11 @@
  */
     
 #include "Equation_Solver.h"
-using namespace std;
+
+char * parenthesize(char * equation)
+{
+
+}
 
 
 
