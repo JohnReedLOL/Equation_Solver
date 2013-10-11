@@ -25,6 +25,29 @@ char * parenthesize(char * equation)
 
 }
 
+{
+int counter = 0;
+for (char * i = expression; *i != '\0'; ++i)
+{
+ if(*i == '{') ++counter;
+ else if(*i = '}') --counter;
+}
+char error[1] = '\0';
+char * error_ptr = error;
+if(counter != 0) return error_ptr;
 
+char * open_paren_ptr = 0;
+char * closed_paren_ptr = 0;
+
+for (char * i = expression; (*i != ')') && (*i != '\0') ; ++i)
+{
+  if(*i == '(') open_paren_ptr = i;
+}
+
+if(*i == ')') closed_paren_ptr = i;
+//Now look to see which operators are between the parenthesis
+//Or if no parenthesis, take the first operator and assume left to right order of operations.
+
+}
 
 
