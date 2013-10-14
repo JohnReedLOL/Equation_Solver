@@ -21,11 +21,28 @@
  You should have received a copy of the GNU General Public License
  along with Equation_Solver. If not, see <http://www.gnu.org/licenses/>.
  */
+#include <iostream>
 
 #ifndef EQUATION_SOLVER_H_
 #define EQUATION_SOLVER_H_
 
 // Note: characters get converted to a 128bit-padded-long-double via std::stold.
+
+
+char legal_nonalphabet_user_sumbol[] = {' ','!','%','(',')','*','+','-','.','/','0','1','2','3','4','5','6','7','8','9',';','<','=','>','[',']','^','{','}'};
+
+void check_legality (char * equation)
+{
+	for(char * i = equation; *i != '\0'; ++i)
+	{
+		if( ((int)(*i)) < 32 || ((int)(*i)) > 125 || *i == '!' || ((int)(*i)) == 34 || *i == '#'
+			|| *i == '$'|| *i == '&'|| ((int)(*i)) == 39|| ((int)(*i)) == 44|| *i == ':'|| *i == '?'
+			|| *i == '@'|| ((int)(*i)) == 92 || *i == '_'|| ((int)(*i)) == 96 || *i == '|')
+		{
+			std::cerr << "Error! I do not understand the \"" << (*i) << "\" symbol." << std::endl;
+		}
+	}
+}
 
 /**
  * A matrix class. Only valid for matrixes with less than seven dimensions that contain 128bit or infinite precision decimals, 64-bit of infinite percision integers, 128-bit mixed numbers, and 256-bit imaginary numbers of form (a + b*i).
@@ -163,12 +180,41 @@ namespace binary
 	char * derive(char * binary_expression);
 
 	/**
-	* The binary::antiderive function is designed to compute the antiderivative of a multi-variable integratable expression with respect to a specified variable. If the given variable is replaced with a number n, the unary antiderivative of the expression will be taken n times.
-	* Note: A binary expression in the form "(x^2 + y^2) antider n" will throw an error because the computer does not know which variable to take the nth antiderivative with respect to.
+	* The binary::antiderive function is designed to compute the integral of a multi-variable integratable expression with respect to a specified variable. If the given variable is replaced with a number n, the unary antiderivative of the expression will be taken n times.
+	* Note: A binary expression in the form "(x^2 + y^2) antider N" will throw an error because the computer does not know which variable to take the Nth antiderivative with respect to.
 	* @param binary_expression A mathematical expression containing an integratable expression, the antider operator, and the variable whom we will be taking the derivative with respect to (or the number of times the antiderivative will be taken), in that order.
 	* @return The result produced by taking the antiderivative of the expression with respect to the variable in it.
 	*/
 	char * antiderive(char * unary_expression);
+
+	/**
+	* The binary::getLimit function computes the limit of an expression with respect to a specified constant value.
+	* Example: (x^2) lim 2 would return '4'. Note that constants can only be represented as numeric values or single digit uppercase characters.
+	* @param binary_expression A mathematical expression containing a variable expression, the lim operator, and the constant whom we will be taking the limit with respect to.
+	* @return The result produced by taking the limit of the variable expression with respect to the given constant.
+	*/
+	char * derive(char * binary_expression);
+
+	/**
+	* The binary::AND function is the boolean AND operation. It only return TRUE if both the left value and the right value have been evaluated to TRUE.
+	* @param binary_expression a boolean value, the logical AND operator, and then another boolean value, in that order.
+	* @return TRUE or FALSE
+	*/
+	char * AND (char * unary_expression);
+
+	/**
+	* The binary::OR function is the boolean inclusive or operation. It only return FALSE if both the left value and the right value have been evaluated to TRUE.
+	* @param binary_expression a boolean value, the logical OR operator, and then another boolean value, in that order.
+	* @return TRUE or FALSE
+	*/
+	char * OR (char * unary_expression);
+
+	/**
+	* The binary::XOR function is the boolean exclusive or operation. It returns false if both the left and right sides evaluate to the same boolean value.
+	* @param binary_expression a boolean value, the logical XOR operator, and then another boolean value, in that order.
+	* @return TRUE or FALSE
+	*/
+	char * XOR (char * unary_expression);
 }
 /**
  * unary operators do not need an order of precedence. They stick to the expression to their right.
@@ -207,10 +253,40 @@ namespace unary
 	/**
 	* The unary::get_factorial function gets the product of all positive integers less than or equal to n.
 	* Note: If you call get_factorial on a decimal that is further than .01 away from the nearest integer, an invalid input expression will be thrown. Decimals that are close to their nearest integers will be rounded to that value by adding 0.5 and then rounding down.
-	* @param unary_expression an integer expressor or numerical value preceded by a "!" operator.
-	* @return The factoral.
+	* @param unary_expression an integer expression or numerical value immediately followed by a "!" operator.
+	* @return The factorial.
 	*/
 	char * get_factorial(char * unary_expression);
+
+	/**
+	* The unary::sin function gets trigonometric sign value of an expression. Identical documentation for cos, tan, cosec, sec, cotan, arcsin, arccos, and arctan.
+	* @param unary_expression a long double expression or numerical value preceded by a "sin" operator.
+	* @return The sin of the given number. If contains a variable, the variable will be isolated and the sign of the non-variable component displayed as a decimal.
+	*/
+	char * sin(char * unary_expression);
+
+	char * cosec(char * unary_expression);
+
+	char * cos(char * unary_expression);
+
+	char * sec(char * unary_expression);
+
+	char * tan(char * unary_expression);
+
+	char * cotan(char * unary_expression);
+
+	char * arcsin(char * unary_expression);
+
+	char * arccos(char * unary_expression);
+
+	char * arctan(char * unary_expression);
+
+	/**
+	* The binary::NOT function is the logical negation function. It turns TRUE into FALSE and vice versa.
+	* @param unary_expression a boolean value followed by the logical OR operator.
+	* @return TRUE or FALSE
+	*/
+	char * NOT (char * unary_expression);
 }
 
 #endif /* EQUATION_SOLVER_H_ */
