@@ -20,6 +20,8 @@
 
 #include "Equation_Solver.h"
 #include <cctype>
+int check_names(char * equation);
+
 
 char * parenthesize(char * equation)
 {
@@ -40,17 +42,17 @@ char * parenthesize(char * equation)
 
 		if (*i == '{')
 			++counter1;
-		else if (*i = '}')
+		else if (*i == '}')
 			--counter1;
 
 		if (*i == '(')
 			++counter2;
-		else if (*i = ')')
+		else if (*i == ')')
 			--counter2;
 
 		if (*i == '[')
 			++counter3;
-		else if (*i = ']')
+		else if (*i == ']')
 			--counter3;
 	}
 
@@ -180,6 +182,11 @@ char * parenthesize(char * equation)
 	}
 //Now we have to check if there are any illegal variable, constant, or function names.
 
+	if(0 == check_names(equation) )
+	{
+		return nullptr;
+	}
+
 //Now look to see which operators are between the parenthesis
 //Or if no parenthesis, take the first operator and assume left to right order of operations.
 
@@ -196,17 +203,17 @@ int check_names(char * equation)
 		if( (std::islower(*i)) )
 		{
 			++i;
-			for(;*i != '+' || *i != '-' || *i != '*' || *i != '/' || *i != '%' || *i != '!'
-					|| *i != '^' || *i != '(' || *i != ')' || *i != '[' || *i != ']' || *i != '{' || *i != '}'
-					|| *i != ';' || *i != '<' || *i != '>' || *i != '='
-					|| !((*i == 'A')&&(*(i+1) == 'N')&&(*(i+2)=='D'))
-					|| !((*i == 'O')&&(*(i+1) == 'R'))
-					|| !((*i == 'X')&&(*(i+1) == 'O')&&(*(i+2)=='R'))
-					|| !((*i == 'N')&&(*(i+1) == 'O')&&(*(i+2)=='T'))
-					|| !((*i == 'I')&&(*(i+1) == 'F'))
-					|| !((*i == 'I')&&(*(i+1) == 'F')&&(*(i+1) == 'F'))
-					|| !((*i == 'T')&&(*(i+1) == 'R')&&(*(i+2)=='U')&&(*(i+3)=='E'))
-					|| !((*i == 'F')&&(*(i+1) == 'A')&&(*(i+2)=='L')&&(*(i+3)=='S')&&(*(i+4)=='E'))
+			for(;*i != '+' && *i != '-' && *i != '*' && *i != '/' && *i != '%' && *i != '!'
+					&& *i != '^' && *i != '(' && *i != ')' && *i != '[' && *i != ']' && *i != '{' && *i != '}'
+					&& *i != ';' && *i != '<' && *i != '>' && *i != '='
+					&& !((*i == 'A')&&(*(i+1) == 'N')&&(*(i+2)=='D'))
+					&& !((*i == 'O')&&(*(i+1) == 'R'))
+					&& !((*i == 'X')&&(*(i+1) == 'O')&&(*(i+2)=='R'))
+					&& !((*i == 'N')&&(*(i+1) == 'O')&&(*(i+2)=='T'))
+					&& !((*i == 'I')&&(*(i+1) == 'F'))
+					&& !((*i == 'I')&&(*(i+1) == 'F')&&(*(i+1) == 'F'))
+					&& !((*i == 'T')&&(*(i+1) == 'R')&&(*(i+2)=='U')&&(*(i+3)=='E'))
+					&& !((*i == 'F')&&(*(i+1) == 'A')&&(*(i+2)=='L')&&(*(i+3)=='S')&&(*(i+4)=='E'))
 				;++i)
 			{
 				if(std::isupper(*i))
@@ -239,7 +246,19 @@ int check_names(char * equation)
 		//and user defined functions will be prepended with a "$".
 		else if(std::isupper(*i) && std::islower(*(i+1)))
 		{
-
+			++i;
+			for(;*i != '+' && *i != '-' && *i != '*' && *i != '/' && *i != '%' && *i != '!'
+					&& *i != '^' && *i != ')' && *i != '[' && *i != ']' && *i != '{' && *i != '}'
+					&& *i != ';' && *i != '<' && *i != '>' && *i != '='
+					&& !(isupper(*i)) && !(::isdigit(*i))
+				;++i)
+			{
+				if(*i == '(')
+					continue;
+				//Else increment to the next lowercase character.
+			}
+			std::cerr << "Error! Functions and equations must consist of a capital letter followed by lowercase letters." << std::endl;
+			return 1;
 		}
 		//If we have a constant, it must consist of all uppercase letters and it must not be a reserved boolean logic word.
 		//User defined constants can hold a value. Their value can be held in "Equation_Solver_Constants.txt"
@@ -250,9 +269,9 @@ int check_names(char * equation)
 		//Post inspection, all user defined constants will be prepended with an &.
 		//All boolean logic functions will be prepended by a "_".
 		//TRUE and FALSE will be preceded by a "|".
-		else if(std::isupper(*i) && !(std::islower(*(i+1))) )
+		else if( std::isupper(*i) )
 		{
-
+			//It is a constant. Let's try to replace it with something from the list of constants.
 		}
 	}
 	return 0;

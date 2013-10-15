@@ -22,6 +22,7 @@
  along with Equation_Solver. If not, see <http://www.gnu.org/licenses/>.
  */
 #include <iostream>
+#include <vector>
 
 #ifndef EQUATION_SOLVER_H_
 #define EQUATION_SOLVER_H_
@@ -51,7 +52,7 @@ struct matrix
 {
 	int width;
 	int length;
-	vector vecArray[];
+	std::vector<float >vecArray;
 };
 
 /**
@@ -60,7 +61,7 @@ struct matrix
 struct vector: public matrix
 {
 	int length;
-	float vector[];
+	std::vector<float >v;
 };
 
 /**
