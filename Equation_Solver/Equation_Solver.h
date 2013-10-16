@@ -32,18 +32,8 @@
 
 char legal_nonalphabet_user_sumbol[] = {' ','!','%','(',')','*','+','-','.','/','0','1','2','3','4','5','6','7','8','9',';','<','=','>','[',']','^','{','}'};
 
-void check_legality (char * equation)
-{
-	for(char * i = equation; *i != '\0'; ++i)
-	{
-		if( ((int)(*i)) < 32 || ((int)(*i)) > 125 || *i == '!' || ((int)(*i)) == 34 || *i == '#'
-			|| *i == '$'|| *i == '&'|| ((int)(*i)) == 39|| ((int)(*i)) == 44|| *i == ':'|| *i == '?'
-			|| *i == '@'|| ((int)(*i)) == 92 || *i == '_'|| ((int)(*i)) == 96 || *i == '|')
-		{
-			std::cerr << "Error! I do not understand the \"" << (*i) << "\" symbol." << std::endl;
-		}
-	}
-}
+
+int check_names(char * const equation);
 
 /**
  * A matrix class. Only valid for matrixes with less than seven dimensions that contain 128bit or infinite precision decimals, 64-bit of infinite percision integers, 128-bit mixed numbers, and 256-bit imaginary numbers of form (a + b*i).
@@ -87,14 +77,14 @@ struct imaginary_number
 * @param equation The equation that goes into the parenthesizer.
 * @return The equation with extra parenthesis set up to explicitly define order of computation.
 */
-char * parenthesize(char * equation);
+char * parenthesize(char * const equation);
 
 /**
 * The simplify function breaks down an equation by simplifying the expression in the innermost parenthesis. It determines whether an expression is binary orunary and then hands the job to the binary or unary simplify functions.
 * @param equation The equation that goes into the parser.
 * @return The equation with innermost parenthesis expression simplified.
 */
-char * simplify(char * equation);
+char * simplify(char * const equation);
 
 
 /**

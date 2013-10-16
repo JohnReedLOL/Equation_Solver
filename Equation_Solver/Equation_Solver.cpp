@@ -20,7 +20,6 @@
 
 #include "Equation_Solver.h"
 #include <cctype>
-int check_names(char * equation);
 
 
 char * parenthesize(char * const equation)
@@ -130,7 +129,7 @@ char * parenthesize(char * const equation)
 		else
 		{
 			std::cerr << "Error! Reached the end of input, but have unclosed parenthesis." << std::endl;
-			return null_ptr;
+			return nullptr;
 		}
 	}
 
@@ -184,7 +183,7 @@ char * parenthesize(char * const equation)
 		else
 		{
 			std::cerr << "Error! Reached the end of input, but have unclosed brackets." << std::endl;
-			return null_ptr;
+			return nullptr;
 		}
 	}
 
@@ -196,17 +195,20 @@ char * parenthesize(char * const equation)
 	}
 //Now we have to check if there are any illegal variable, constant, or function names.
 
-	if(0 == check_names(equation) )
+	if(0 == ::check_names(equation) )
 	{
 		return nullptr;
 	}
+
+	// Temp return
+	return nullptr;
 
 //Now look to see which operators are between the parenthesis
 //Or if no parenthesis, take the first operator and assume left to right order of operations.
 
 }
 
-int check_names(char * equation)
+int check_names(char * const equation)
 {
 	for(char * i = equation; *i != '\0'; ++i)
 	{

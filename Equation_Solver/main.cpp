@@ -21,7 +21,7 @@
  along with Equation_Solver. If not, see <http://www.gnu.org/licenses/>.
  */
     
-#include "Equation_Solver.cpp"
+#include "Equation_Solver.h"
 #include <fstream>
 using namespace std;
 
