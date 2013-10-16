@@ -23,21 +23,20 @@
 int check_names(char * equation);
 
 
-char * parenthesize(char * equation)
+char * parenthesize(char * const equation)
 {
 	int counter1 = 0;
 	int counter2 = 0;
 	int counter3 = 0;
 
-	bool inputInvalid = false;
 	for (char * i = equation; *i != '\0'; ++i)
 	{
 		if (((int) (*i)) < 32 || ((int) (*i)) > 125 || *i == '!' || ((int) (*i)) == 34 || *i == '#' || *i == '$'
-				|| *i == '&' || ((int) (*i)) == 39 || ((int) (*i)) == 44 || *i == ':' || *i == '?' || *i == '@'
+				|| *i == '&' || ((int) (*i)) == 39 || *i == ':' || *i == '?' || *i == '@'
 				|| ((int) (*i)) == 92 || *i == '_' || ((int) (*i)) == 96 || *i == '|')
 		{
 			std::cerr << "Error! I do not understand the \"" << (*i) << "\" symbol." << std::endl;
-			inputInvalid = true;
+			return nullptr;
 		}
 
 		if (*i == '{')
@@ -62,33 +61,27 @@ char * parenthesize(char * equation)
 			std::cerr << "Error! More open braces than closed braces. " << std::endl;
 		else
 			std::cerr << "Error! More closed braces than open braces. " << std::endl;
-		inputInvalid = true;
+		return nullptr;
 	}
-	else if (counter1 != 0)
+	else if (counter2 != 0)
 	{
 		if (counter1 > 0)
 			std::cerr << "Error! More open parenthesis than closed parenthesis. " << std::endl;
 		else
 			std::cerr << "Error! More closed parenthesis than open parenthesis. " << std::endl;
-		inputInvalid = true;
+		return nullptr;
 	}
-	if (counter1 != 0)
+	if (counter3 != 0)
 	{
 		if (counter1 > 0)
 			std::cerr << "Error! More open brackets than closed brackets. " << std::endl;
 		else
 			std::cerr << "Error! More closed brackets than open brackets. " << std::endl;
-		inputInvalid = true;
+		return nullptr;
 	}
 
-	if (inputInvalid == true)
-		return nullptr;
-
-	char * open_paren_ptr = equation;
-	char * closed_paren_ptr = 0;
-
-	char * open_bracket_ptr = equation;
-	char * closed_bracket_ptr = 0;
+	char * open_paren_ptr = nullptr;
+	char * closed_paren_ptr = nullptr;
 
 	char * i;
 	for (i = equation; (*i != ')') && (*i != '\0') && (*i != '='); ++i)
@@ -100,78 +93,99 @@ char * parenthesize(char * equation)
 	if (*i == ')')
 	{
 		closed_paren_ptr = i;
-		i = open_paren_ptr;
+		if (open_paren_ptr == nullptr)
+		{
+			std::cerr << "You misplaced your open parenthesis." << std::endl;
+			return nullptr;
+		}
+		else
+		{
+			i = open_paren_ptr;
+		}
 	}
 	else if (*i == '=')
 	{
+	
 		closed_paren_ptr = i;
 
-		if( (open_paren_ptr != equation) )
+		if (open_paren_ptr == nullptr)
 		{
-			std::cerr << "Error! Your left parenthesis is off!" << std::endl;
-			inputInvalid = true;
+			open_paren_ptr = equation;
+			i = open_paren_ptr;
 		}
-		while(*i != '\0')
+		else
 		{
-			++i;
+			i = open_paren_ptr;
 		}
-		--i;
-		if( *i != ')' )
-		{
-			std::cerr << "Error! Your right parenthesis is off!" << std::endl;
-			inputInvalid = true;
-		}
-		if (inputInvalid == true)
-			return nullptr;
-
-		i = open_bracket_ptr;
 	}
-	else //*i == '\0'
+	else if (*i == '\0')
 	{
 		closed_paren_ptr = i;
-		i = equation;
+
+		if (open_paren_ptr == nullptr)
+		{
+			open_paren_ptr = equation;
+			i = open_paren_ptr;
+		}
+		else
+		{
+			std::cerr << "Error! Reached the end of input, but have unclosed parenthesis." << std::endl;
+			return null_ptr;
+		}
 	}
+
+	char * open_bracket_ptr = nullptr;
+	char * closed_bracket_ptr = nullptr;
 
 	char * j;
-	for (j = equation; (*j != ']') && (*j != '\0') && (*j != '='); ++i)
+	for (j = equation; (*j != ']') && (*j != '\0') && (*j != '='); ++j)
 	{
 		if (*j == '[')
-		open_bracket_ptr = j;
+			open_bracket_ptr = j;
 	}
 
 	if (*j == ']')
 	{
-		closed_bracket_ptr = i;
-		j = open_bracket_ptr;
+		closed_bracket_ptr = j;
+		if (open_bracket_ptr == nullptr)
+		{
+			std::cerr << "You misplaced your open parenthesis." << std::endl;
+			return nullptr;
+		}
+		else
+		{
+			j = open_bracket_ptr;
+		}
 	}
 	else if (*j == '=')
 	{
+	
 		closed_bracket_ptr = j;
 
-		if( (open_bracket_ptr != equation) )
+		if (open_bracket_ptr == nullptr)
 		{
-			std::cerr << "Error! Your left bracket is off!" << std::endl;
-			inputInvalid = true;
+			open_bracket_ptr = equation;
+			j = open_bracket_ptr;
 		}
-		while(*j != '\0')
+		else
 		{
-			++j;
+			j = open_bracket_ptr;
 		}
-		--j;
-		if( *j != ']' )
-		{
-			std::cerr << "Error! Your right bracket is off!" << std::endl;
-			inputInvalid = true;
-		}
-		if (inputInvalid == true)
-			return nullptr;
-
-		j = open_bracket_ptr;
 	}
-	else //*j == '\0'
+	else if (*j == '\0')
 	{
-		closed_paren_ptr = i;
-		j = equation;
+		closed_bracket_ptr = j;
+
+		if (open_bracket_ptr == nullptr)
+		{
+			open_bracket_ptr = equation;
+			j = open_bracket_ptr;
+		}
+		else
+		{
+			std::cerr << "Error! Reached the end of input, but have unclosed brackets." << std::endl;
+			return null_ptr;
+		}
 	}
 
 	if( (open_paren_ptr < open_bracket_ptr && closed_paren_ptr < closed_bracket_ptr)
@@ -205,7 +219,7 @@ int check_names(char * equation)
 			++i;
 			for(;*i != '+' && *i != '-' && *i != '*' && *i != '/' && *i != '%' && *i != '!'
 					&& *i != '^' && *i != '(' && *i != ')' && *i != '[' && *i != ']' && *i != '{' && *i != '}'
-					&& *i != ';' && *i != '<' && *i != '>' && *i != '='
+					&& *i != ';' && *i != '<' && *i != '>' && *i != '=' && *i != ','
 					&& !((*i == 'A')&&(*(i+1) == 'N')&&(*(i+2)=='D'))
 					&& !((*i == 'O')&&(*(i+1) == 'R'))
 					&& !((*i == 'X')&&(*(i+1) == 'O')&&(*(i+2)=='R'))
@@ -249,7 +263,7 @@ int check_names(char * equation)
 			++i;
 			for(;*i != '+' && *i != '-' && *i != '*' && *i != '/' && *i != '%' && *i != '!'
 					&& *i != '^' && *i != ')' && *i != '[' && *i != ']' && *i != '{' && *i != '}'
-					&& *i != ';' && *i != '<' && *i != '>' && *i != '='
+					&& *i != ';' && *i != '<' && *i != '>' && *i != '=' && *i != ','
 					&& !(isupper(*i)) && !(::isdigit(*i))
 				;++i)
 			{
