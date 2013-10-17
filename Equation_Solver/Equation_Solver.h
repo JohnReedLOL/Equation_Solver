@@ -21,17 +21,15 @@
  You should have received a copy of the GNU General Public License
  along with Equation_Solver. If not, see <http://www.gnu.org/licenses/>.
  */
+
+#pragma once
+
 #include <iostream>
 #include <vector>
-
-#ifndef EQUATION_SOLVER_H_
-#define EQUATION_SOLVER_H_
+#include <cctype>
+#include <fstream>
 
 // Note: characters get converted to a 128bit-padded-long-double via std::stold.
-
-
-char legal_nonalphabet_user_sumbol[] = {' ','!','%','(',')','*','+','-','.','/','0','1','2','3','4','5','6','7','8','9',';','<','=','>','[',']','^','{','}'};
-
 
 int check_names(char * const equation);
 
@@ -279,5 +277,3 @@ namespace unary
 	*/
 	char * NOT (char * unary_expression);
 }
-
-#endif /* EQUATION_SOLVER_H_ */

@@ -19,8 +19,6 @@
  */
 
 #include "Equation_Solver.h"
-#include <cctype>
-
 
 char * parenthesize(char * const equation)
 {
@@ -104,7 +102,6 @@ char * parenthesize(char * const equation)
 	}
 	else if (*i == '=')
 	{
-	
 		closed_paren_ptr = i;
 
 		if (open_paren_ptr == nullptr)
@@ -195,13 +192,15 @@ char * parenthesize(char * const equation)
 	}
 //Now we have to check if there are any illegal variable, constant, or function names.
 
-	if(0 == ::check_names(equation) )
+	if(0 != ::check_names(equation) )
 	{
 		return nullptr;
 	}
 
-	// Temp return
-	return nullptr;
+	// Temp return. Note that it is returning an invalid address.
+	static char temp = 'a';
+	char * temp_ptr = &temp;
+	return temp_ptr;
 
 //Now look to see which operators are between the parenthesis
 //Or if no parenthesis, take the first operator and assume left to right order of operations.
@@ -270,11 +269,20 @@ int check_names(char * const equation)
 				;++i)
 			{
 				if(*i == '(')
-					continue;
+				{
+					break;
+				}
+				else if(*i != '+' && *i != '-' && *i != '*' && *i != '/' && *i != '%' && *i != '!'
+					&& *i != '^' && *i != ')' && *i != '[' && *i != ']' && *i != '{' && *i != '}'
+					&& *i != ';' && *i != '<' && *i != '>' && *i != '=' && *i != ','
+					&& !(isupper(*i)) && !(::isdigit(*i)) )
+					{
+						std::cerr << "Error! Functions must consist of a capital letter followed by lowercase letters." << std::endl;
+						return 1;
+					}
 				//Else increment to the next lowercase character.
 			}
-			std::cerr << "Error! Functions and equations must consist of a capital letter followed by lowercase letters." << std::endl;
-			return 1;
+
 		}
 		//If we have a constant, it must consist of all uppercase letters and it must not be a reserved boolean logic word.
 		//User defined constants can hold a value. Their value can be held in "Equation_Solver_Constants.txt"

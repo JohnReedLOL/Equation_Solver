@@ -22,10 +22,9 @@
  */
     
 #include "Equation_Solver.h"
-#include <fstream>
 using namespace std;
 
-inline bool exists_test (const std::string& name) {
+static inline bool exists_test (const std::string& name) {
    if (FILE *file = std::fopen(name.c_str(), "r")) {
        std::fclose(file);
        return true;
@@ -141,18 +140,24 @@ int main(int argc, char **argv)
 		std::fclose(file_ptr);
 	}
 	std::puts("If this is your first time using this program, make sure to look in my current folder for the instructions.");
-	char equation[80000];
+	char equation[23000];
 	std::puts("After you've looked at the instructions, write an equation using the symbols +, -, *, /, %, ^, (,), <, >, and =. ");
-	std::cin.getline (equation,20005);
+	std::cin.getline (equation,15005);
 	const int string_Length = std::cin.gcount();
-	if( std::cin.gcount() > 10000)
-		std::printf("The number of characters you just entered was: %d", string_Length);
-	if( std::cin.gcount() > 19999)
+	if( string_Length > 10000)
 	{
-		std::puts("You just went over the 20000 character limit. Equation_Solver terminating.");
+		std::puts("You are approaching the 15000 character limit.");
+	}
+	if( string_Length > 14999)
+	{
+		std::puts("You just went over the 15000 character limit. Equation_Solver terminating.");
 		return 1;
 	}
-
+	if (::parenthesize(equation) == nullptr)
+	{
+		std::puts("Closing program due to error");
+		return 1;
+	}
 	return 0;
 }
 
