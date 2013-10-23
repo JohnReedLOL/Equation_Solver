@@ -74,6 +74,7 @@ int main(int argc, char **argv)
 		fputs("For example: \n\n",file_ptr);
 		fputs("Log(x,b) = The log of 'x' base 'b'. \n",file_ptr);
 		fputs("Base(x,b) = The value of 'x' expressed in base 'b'. If b is 2 you get binary. \n\n",file_ptr);
+		fputs("Fact(x) = x factorial, or x!. It equal x*(x-1)*(x-2)*...*(1)",file_ptr);
 
 		fputs("Der(equation) = The derivative of 'equation' with respect to the only variable in the equation.  \n",file_ptr);
 		fputs("Der(equation,C) = The derivative of 'equation' at constant 'C'.  \n",file_ptr);
