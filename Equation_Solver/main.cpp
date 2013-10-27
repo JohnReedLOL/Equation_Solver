@@ -46,7 +46,7 @@ int main(int argc, char **argv)
 	{
 		file_ptr = std::fopen("Equation_Solver_Instructions.txt", "w");
 		fputs("Welcome to Equation_Solver. \n\n",file_ptr);
-		fputs("Before you begin writing mathematical equations and expressions, you need to know the three rules:\n",file_ptr);
+		fputs("Before you begin writing mathematical equations and expressions, you need to know the four rules:\n",file_ptr);
 		fputs("#1. All variables are composed entirely of lowercase letters with an optional number at the end.\n",file_ptr);
 		fputs("x, x1, y, y1, z, and z1 are all legal variables. \n\n",file_ptr);
 		fputs("#2. All functions must consist of one uppercase letter followed by all lowercase letters followed by parenthesis. \n",file_ptr);
@@ -98,7 +98,7 @@ int main(int argc, char **argv)
 		fputs("Arccos(theta) = the inverse of Cos \n",file_ptr);
 		fputs("Arctan(theta) = the inverse of Tan \n",file_ptr);
 
-		fputs("\nYou can create your own functions down here... \n",file_ptr);
+		fputs("\nYou can create your own functions below: \n",file_ptr);
 		std::fclose(file_ptr);
 	}
 
@@ -116,7 +116,7 @@ int main(int argc, char **argv)
 		fputs("PI = 3.141592653589793238462643 \n",file_ptr);
 		fputs("E = 2.718281828459045235360287 \n",file_ptr);
 		fputs("I = (-1)^(1/2) \n",file_ptr);
-		fputs("\nYou can create your own constants down here... \n",file_ptr);
+		fputs("\nYou can create your own constants below: \n",file_ptr);
 		std::fclose(file_ptr);
 	}
 
@@ -143,16 +143,25 @@ int main(int argc, char **argv)
 	std::puts("If this is your first time using this program, make sure to look in my current folder for the instructions.");
 	char equation[23000];
 	std::puts("After you've looked at the instructions, write an equation using the symbols +, -, *, /, %, ^, (,), <, >, and =. ");
-	std::cin.getline (equation,15005);
+	std::cin.getline (equation,15006);
 	const int string_Length = std::cin.gcount();
 	if( string_Length > 10000)
 	{
 		std::puts("You are approaching the 15000 character limit.");
 	}
-	if( string_Length > 14999)
+	if( string_Length > 15000)
 	{
 		std::puts("You just went over the 15000 character limit. Equation_Solver terminating.");
 		return 1;
+	}
+	else // 6 null terminating null characters at the end.
+	{
+		equation[string_Length] = '\0';
+		equation[string_Length+1] = '\0';
+		equation[string_Length+2] = '\0';
+		equation[string_Length+3] = '\0';
+		equation[string_Length+4] = '\0';
+		equation[string_Length+5] = '\0';
 	}
 	if (::parenthesize(equation) == nullptr)
 	{

@@ -47,6 +47,28 @@ char * parenthesize(char * const equation) {
 			return nullptr;
 		}
 
+		bool isBinary1 = false;
+		bool isBinary2 = false;
+
+		if ( *i == '*' || *i == '/' || *i == '%' || *i == '^' || *i == '+' || *i == '-'
+				|| *i == '<' || *i == '>' || *i == '=' || *i == '(' || *i == '[' || *i == '{')
+		{
+			isBinary1 = true;
+		}
+
+		if ( *(i+1) == '*' || *(i+1) == '/' || *(i+1) == '%' || *(i+1) == '^'
+				|| *(i+1) == '<' || *(i+1) == '>' || *(i+1) == '=')
+		{
+			isBinary2 = true;
+		}
+
+		if(isBinary1 && isBinary2)
+		{
+			std::cout << "You cannot have \"" << *i << "\" followed by \"" << *(i+1) << "\""<< std::endl;
+			return nullptr;
+		}
+
+
 		if (*i == '{') {
 			++counter1;
 			if (reachedEquals == false)
@@ -89,37 +111,84 @@ char * parenthesize(char * const equation) {
 				--counter3right;
 		}
 
-		if (*i == '=')
-		{
+		if (*i == '=') {
 			++counter4;
 			reachedEquals = true;
 		}
 	}
 
 	if (counter1 != 0 || counter1left != 0 || counter1right != 0) {
-		if (counter1 > 0 || counter1left > 0 || counter1right > 0)
-			std::cerr << "Error! More open braces than closed braces. "
+		if (counter1 > 0)
+			std::cerr << "Error! More open braces than closed braces. \n"
 					<< std::endl;
-		else
-			std::cerr << "Error! More closed braces than open braces. "
+		else if (counter1left > 0)
+			std::cerr
+					<< "Error! More open braces than closed braces on the left side of the \"=\" sign.\n"
+					<< std::endl;
+		else if (counter1right > 0)
+			std::cerr
+					<< "Error! More open braces than closed braces on the right side of the \"=\" sign.\n"
+					<< std::endl;
+		else if (counter1 < 0)
+			std::cerr << "Error! More closed braces than closed braces. \n"
+					<< std::endl;
+		else if (counter1left < 0)
+			std::cerr
+					<< "Error! More closed braces than open braces on the left side of the \"=\" sign.\n"
+					<< std::endl;
+		else if (counter1right < 0)
+			std::cerr
+					<< "Error! More closed braces than open braces on the right side of the \"=\" sign.\n"
 					<< std::endl;
 		return nullptr;
 	} else if (counter2 != 0 || counter2left != 0 || counter2right != 0) {
-		if (counter2 > 0 || counter2left > 0 || counter2right > 0)
+		if (counter2 > 0)
 			std::cerr
-					<< "Error! More open parenthesis than closed parenthesis. "
+					<< "Error! More open parentheses than closed parentheses. \n"
 					<< std::endl;
-		else
+		else if (counter2left > 0)
 			std::cerr
-					<< "Error! More closed parenthesis than open parenthesis. "
+					<< "Error! More open parentheses than closed parentheses on the left side of the \"=\" sign.\n"
+					<< std::endl;
+		else if (counter2right > 0)
+			std::cerr
+					<< "Error! More open parentheses than closed parentheses on the right side of the \"=\" sign.\n"
+					<< std::endl;
+		else if (counter2 < 0)
+			std::cerr
+					<< "Error! More closed parentheses than closed parentheses. \n"
+					<< std::endl;
+		else if (counter2left < 0)
+			std::cerr
+					<< "Error! More closed parentheses than open parentheses on the left side of the \"=\" sign.\n"
+					<< std::endl;
+		else if (counter2right < 0)
+			std::cerr
+					<< "Error! More closed parentheses than open parentheses on the right side of the \"=\" sign.\n"
 					<< std::endl;
 		return nullptr;
 	} else if (counter3 != 0 || counter3left != 0 || counter3right != 0) {
-		if (counter3 > 0 || counter3left > 0 || counter3right > 0)
-			std::cerr << "Error! More open brackets than closed brackets. "
+		if (counter3 > 0)
+			std::cerr << "Error! More open brackets than closed brackets. \n"
 					<< std::endl;
-		else
-			std::cerr << "Error! More closed brackets than open brackets. "
+		else if (counter3left > 0)
+			std::cerr
+					<< "Error! More open brackets than closed brackets on the left side of the \"=\" sign.\n"
+					<< std::endl;
+		else if (counter3right > 0)
+			std::cerr
+					<< "Error! More open brackets than closed brackets on the right side of the \"=\" sign.\n"
+					<< std::endl;
+		else if (counter3 < 0)
+			std::cerr << "Error! More closed brackets than closed brackets. \n"
+					<< std::endl;
+		else if (counter3left < 0)
+			std::cerr
+					<< "Error! More closed brackets than open brackets on the left side of the \"=\" sign.\n"
+					<< std::endl;
+		else if (counter3right < 0)
+			std::cerr
+					<< "Error! More closed brackets than open brackets on the right side of the \"=\" sign.\n"
 					<< std::endl;
 		return nullptr;
 	} else if (counter4 > 1) {
