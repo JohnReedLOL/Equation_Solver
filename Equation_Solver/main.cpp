@@ -147,11 +147,11 @@ int main(int argc, char **argv)
 	const int string_Length = std::cin.gcount();
 	if( string_Length > 10000)
 	{
-		std::puts("You are approaching the 15000 character limit.");
+		std::puts("You are approaching the 15000 character limit.\n");
 	}
 	if( string_Length > 15000)
 	{
-		std::puts("You just went over the 15000 character limit. Equation_Solver terminating.");
+		std::puts("You just went over the 15000 character limit. Equation_Solver terminating.\n");
 		return 1;
 	}
 	else // 6 null terminating null characters at the end.
@@ -165,7 +165,7 @@ int main(int argc, char **argv)
 	}
 	if (::parenthesize(equation) == nullptr)
 	{
-		std::puts("Closing program due to error");
+		std::puts("Closing program due to error.\n");
 		return 1;
 	}
 	return 0;

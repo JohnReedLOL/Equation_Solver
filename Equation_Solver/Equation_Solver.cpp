@@ -64,7 +64,7 @@ char * parenthesize(char * const equation) {
 
 		if(isBinary1 && isBinary2)
 		{
-			std::cout << "You cannot have \"" << *i << "\" followed by \"" << *(i+1) << "\""<< std::endl;
+			std::cerr << "Error! You cannot have a \"" << *i << "\" followed by a \"" << *(i+1) << "\".\n"<< std::endl;
 			return nullptr;
 		}
 
