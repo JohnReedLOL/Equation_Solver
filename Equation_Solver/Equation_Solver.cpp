@@ -89,6 +89,12 @@ char * parenthesize(char * const equation) {
 			isOpen1 = true;
 		}
 
+		//ignore whitespace between words.
+		while(*i == ' ')
+		{
+			++i;
+		}
+
 		if (*i == '*' || *i == '/' || *i == '%' || *i == '^' || *i == '<'
 				|| *i == '>' || *i == '=') {
 			++i;
