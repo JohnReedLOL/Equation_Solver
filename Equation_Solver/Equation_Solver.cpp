@@ -48,26 +48,94 @@ char * parenthesize(char * const equation) {
 		}
 
 		bool isBinary1 = false;
+		bool isBinaryWord1 = false;
+		bool isOpen1 = false;
 		bool isBinary2 = false;
+		bool isBinaryWord2 = false;
+		bool isClosed2 = false;
 
-		if ( *i == '*' || *i == '/' || *i == '%' || *i == '^' || *i == '+' || *i == '-'
-				|| *i == '<' || *i == '>' || *i == '=' || *i == '(' || *i == '[' || *i == '{')
-		{
+		if (*i == '*' || *i == '/' || *i == '%' || *i == '^' || *i == '+'
+				|| *i == '-' || *i == '<' || *i == '>' || *i == '=') {
+			++i;
 			isBinary1 = true;
+		} else if (((*i == 'I') && (*(i + 1) == 'F'))) {
+			i += 2;
+			isBinaryWord1 = true;
+		} else if (((*i == 'O') && (*(i + 1) == 'R'))) {
+			i += 2;
+			isBinaryWord1 = true;
+		} else if (((*i == 'A') && (*(i + 1) == 'N') && (*(i + 2) == 'D'))) {
+			i += 3;
+			isBinaryWord1 = true;
+		} else if (((*i == 'X') && (*(i + 1) == 'O') && (*(i + 2) == 'R'))) {
+			i += 3;
+			isBinaryWord1 = true;
+		} else if (((*i == 'N') && (*(i + 1) == 'O') && (*(i + 2) == 'T'))) {
+			i += 3;
+			isBinaryWord1 = true;
+		} else if (((*i == 'I') && (*(i + 1) == 'F') && (*(i + 1) == 'F'))) {
+			i += 3;
+			isBinaryWord1 = true;
+		} else if (((*i == 'T') && (*(i + 1) == 'R') && (*(i + 2) == 'U')
+				&& (*(i + 3) == 'E'))) {
+			i += 4;
+			isBinaryWord1 = true;
+		} else if (((*i == 'F') && (*(i + 1) == 'A') && (*(i + 2) == 'L')
+				&& (*(i + 3) == 'S') && (*(i + 4) == 'E'))) {
+			i += 5;
+			isBinaryWord1 = true;
+		} else if (*i == '(' || *i == '[' || *i == '{') {
+			++i;
+			isOpen1 = true;
 		}
 
-		if ( *(i+1) == '*' || *(i+1) == '/' || *(i+1) == '%' || *(i+1) == '^'
-				|| *(i+1) == '<' || *(i+1) == '>' || *(i+1) == '=')
-		{
+		if (*i == '*' || *i == '/' || *i == '%' || *i == '^' || *i == '<'
+				|| *i == '>' || *i == '=') {
+			++i;
 			isBinary2 = true;
+		} else if (((*i == 'I') && (*(i + 1) == 'F'))) {
+			i += 2;
+			isBinaryWord2 = true;
+		} else if (((*i == 'O') && (*(i + 1) == 'R'))) {
+			i += 2;
+			isBinaryWord2 = true;
+		} else if (((*i == 'A') && (*(i + 1) == 'N') && (*(i + 2) == 'D'))) {
+			i += 3;
+			isBinaryWord2 = true;
+		} else if (((*i == 'X') && (*(i + 1) == 'O') && (*(i + 2) == 'R'))) {
+			i += 3;
+			isBinaryWord2 = true;
+		} else if (((*i == 'N') && (*(i + 1) == 'O') && (*(i + 2) == 'T'))) {
+			i += 3;
+			isBinaryWord2 = true;
+		} else if (((*i == 'I') && (*(i + 1) == 'F') && (*(i + 1) == 'F'))) {
+			i += 3;
+			isBinaryWord2 = true;
+		} else if (((*i == 'T') && (*(i + 1) == 'R') && (*(i + 2) == 'U')
+				&& (*(i + 3) == 'E'))) {
+			i += 4;
+			isBinaryWord2 = true;
+		} else if (((*i == 'F') && (*(i + 1) == 'A') && (*(i + 2) == 'L')
+				&& (*(i + 3) == 'S') && (*(i + 4) == 'E'))) {
+			i += 5;
+			isBinaryWord2 = true;
+		} else if (*i == ')' || *i == ']' || *i == '}') {
+			isClosed2 = true;
 		}
-
-		if(isBinary1 && isBinary2)
-		{
-			std::cerr << "Error! You cannot have a \"" << *i << "\" followed by a \"" << *(i+1) << "\".\n"<< std::endl;
+		//NO ERROR MARKER FOR ANDAND
+		if ((isBinary1 && isBinary2) || (isBinary1 && isClosed2)
+				|| (isOpen1 && isBinary2)) {
+			std::cerr << "Error! You cannot have a \"" << *i
+					<< "\" followed by a \"" << *(i + 1) << "\".\n"
+					<< std::endl;
+			return nullptr;
+		} else if ((isBinaryWord1 && isBinary2) || (isBinary1 && isBinaryWord2)
+				|| (isBinaryWord1 && isClosed2) || (isOpen1 && isBinaryWord2)) {
+			std::cerr
+					<< "Error! A boolean operator is clashing with some other operator or with some parenthesis/brackets/braces."
+					<< std::endl;
 			return nullptr;
 		}
-
 
 		if (*i == '{') {
 			++counter1;
