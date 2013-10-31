@@ -20,11 +20,109 @@
 
 #include "Equation_Solver.h"
 
+struct BinaryOp {
+	char name;
+	BinaryOp(char myName) :
+			name(myName) {
+	}
+	;
+}const bop('*');
+
+struct UnaryOp {
+	char name;
+	UnaryOp(char myName) :
+			name(myName) {
+	}
+	;
+}const unop('-');
+
+struct BinaryWord {
+	std::string name;
+	BinaryWord(std::string myString) :
+			name(myString) {
+	}
+	;
+}const bword("AND");
+
+struct UnaryWord {
+	std::string name;
+	UnaryWord(std::string myString) :
+			name(myString) {
+	}
+	;
+}const unword("NOT");
+
+struct Constant {
+	std::string name;
+	std::string def;
+	Constant(std::string myString) :
+			name(myString) {
+	}
+	;
+	Constant(std::string myName, std::string myDef) :
+			name(myName), def(myDef) {
+	}
+	;
+}const con("C", "5.5^2");
+
+struct Variable {
+	std::string name;
+	std::string def;
+	Variable(std::string myString) :
+			name(myString), def("undef") {
+	}
+	;
+	Variable(std::string myName, std::string myDef) :
+			name(myName), def(myDef) {
+	}
+	;
+}const var("x", "5.6");
+
+struct Function {
+	std::string name;
+	std::string def;
+	Function(std::string myString) :
+			name(myString), def("undef") {
+	}
+	;
+	Function(std::string myName, std::string myDef) :
+			name(myName), def(myDef) {
+	}
+	;
+}const func("Func()", "x+7;x-2; if x=3 : x=7;");
+
+struct BLit {
+	bool val;
+	BLit(bool myVal) :
+			val(myVal) {
+	}
+	;
+}const blit(true);
+
+struct BInt {
+	long num;
+	long denom;
+	BInt(long myNum, long myDenom) :
+			num(myNum), denom(myDenom) {
+	}
+	;
+}const bint(7l, 1l);
+
+struct BDec {
+	long double dec;
+	BDec(long double myDec) :
+			dec(myDec) {
+	}
+	;
+}const bdec(5.5L);
+
 char * parenthesize(char * const equation) {
 	int counter1 = 0;
 	int counter2 = 0;
 	int counter3 = 0;
 	int counter4 = 0;
+	int counter5 = 0;
+	int counter6 = 0;
 
 	bool reachedEquals = false;
 	int counter1left = 0;
@@ -50,14 +148,100 @@ char * parenthesize(char * const equation) {
 		bool isBinary1 = false;
 		bool isBinaryWord1 = false;
 		bool isOpen1 = false;
+
+		bool isConstant1 = false;
+		bool isVariable1 = false;
+		bool isFunction1 = false;
+		//Add litaral checking support.
+		bool BLit1 = false;
+		bool BDec1 = false;
+		bool BInt1 = false;
+
 		bool isBinary2 = false;
 		bool isBinaryWord2 = false;
 		bool isClosed2 = false;
 
-		if (*i == '*' || *i == '/' || *i == '%' || *i == '^' || *i == '+'
+		bool isConstant2 = false;
+		bool isVariable2 = false;
+		bool isFunction2 = false;
+		bool BLit2 = false;
+		bool BDec2 = false;
+		bool BInt2 = false;
+
+		bool isPlusMinus1 = false;
+		bool isPlusMinus2 = false;
+
+		if ((std::islower(*i))) {
+			isVariable1 = true;
+
+			++i;
+			for (;
+					*i != ' ' && *i != '+' && *i != '-' && *i != '*'
+							&& *i != '/' && *i != '%' && *i != '!' && *i != '^'
+							&& *i != '(' && *i != ')' && *i != '[' && *i != ']'
+							&& *i != '{' && *i != '}' && *i != ';' && *i != '<'
+							&& *i != '>' && *i != '=' && *i != ','
+							&& !((*i == 'A') && (*(i + 1) == 'N')
+									&& (*(i + 2) == 'D'))
+							&& !((*i == 'O') && (*(i + 1) == 'R'))
+							&& !((*i == 'X') && (*(i + 1) == 'O')
+									&& (*(i + 2) == 'R'))
+							&& !((*i == 'N') && (*(i + 1) == 'O')
+									&& (*(i + 2) == 'T'))
+							&& !((*i == 'I') && (*(i + 1) == 'F'))
+							&& !((*i == 'I') && (*(i + 1) == 'F')
+									&& (*(i + 1) == 'F'))
+							&& !((*i == 'T') && (*(i + 1) == 'R')
+									&& (*(i + 2) == 'U') && (*(i + 3) == 'E'))
+							&& !((*i == 'F') && (*(i + 1) == 'A')
+									&& (*(i + 2) == 'L') && (*(i + 3) == 'S')
+									&& (*(i + 4) == 'E')); ++i) {
+				if (std::isupper(*i)) {
+					std::cerr
+							<< "Variable names must start with a lowercase letter and cannot contain uppercase letters."
+							<< std::endl;
+					return nullptr;
+				} else if (std::isdigit(*i)) {
+					if (std::islower(*(i + 1))) {
+						std::cerr
+								<< "Numbers can only go at the very end of variable names."
+								<< std::endl;
+						return nullptr;
+					}
+				}
+			}
+		} else if (std::isupper(*i) && std::islower(*(i + 1))) {
+			isFunction1 = true;
+			++i;
+			for (;
+					*i != ' ' && *i != '+' && *i != '-' && *i != '*'
+							&& *i != '/' && *i != '%' && *i != '!' && *i != '^'
+							&& *i != ')' && *i != '[' && *i != ']' && *i != '{'
+							&& *i != '}' && *i != ';' && *i != '<' && *i != '>'
+							&& *i != '=' && *i != ',' && !(isupper(*i))
+							&& !(::isdigit(*i)); ++i) {
+				if (*i == '(') {
+					break;
+				} else if (*i != '+' && *i != '-' && *i != '*' && *i != '/'
+						&& *i != '%' && *i != '!' && *i != '^' && *i != ')'
+						&& *i != '[' && *i != ']' && *i != '{' && *i != '}'
+						&& *i != ';' && *i != '<' && *i != '>' && *i != '='
+						&& *i != ',' && !(isupper(*i)) && !(::isdigit(*i))) {
+					std::cerr
+							<< "Error! Functions must consist of a capital letter followed by lowercase letters followed by parenthesis."
+							<< std::endl;
+
+					return nullptr;
+				}
+				//Else increment to the next lowercase character.
+			}
+		} else if (*i == '*' || *i == '/' || *i == '%' || *i == '^' || *i == '+'
 				|| *i == '-' || *i == '<' || *i == '>' || *i == '=') {
 			++i;
 			isBinary1 = true;
+			if (*i == '+' || *i == '-')
+				isPlusMinus1 = true;
+
 		} else if (((*i == 'I') && (*(i + 1) == 'F'))) {
 			i += 2;
 			isBinaryWord1 = true;
@@ -87,11 +271,29 @@ char * parenthesize(char * const equation) {
 		} else if (*i == '(' || *i == '[' || *i == '{') {
 			++i;
 			isOpen1 = true;
+		} else if (std::isupper(*i)) {
+			isConstant1 = true;
+			++i;
+			while (*i != ' ' && *i != '+' && *i != '-' && *i != '*' && *i != '/'
+					&& *i != '%' && *i != '!' && *i != '^' && *i != ')'
+					&& *i != ')' && *i != '[' && *i != ']' && *i != '{'
+					&& *i != '}' && *i != ';' && *i != '<' && *i != '>'
+					&& *i != '=' && *i != ',' && !(islower(*i))) {
+				++i;
+				if (std::isdigit(*i)) {
+					if (std::isupper(*(i + 1))) {
+						std::cerr
+								<< "Numbers can only go at the very end of a constant."
+								<< std::endl;
+						return nullptr;
+					}
+				}
+			}
+			//Else increment to the next lowercase character.
 		}
 
 		//ignore whitespace between words.
-		while(*i == ' ')
-		{
+		while (*i == ' ') {
 			++i;
 		}
 
@@ -99,6 +301,8 @@ char * parenthesize(char * const equation) {
 				|| *i == '>' || *i == '=') {
 			++i;
 			isBinary2 = true;
+			if (*i == '+' || *i == '-')
+				isPlusMinus2 = true;
 		} else if (((*i == 'I') && (*(i + 1) == 'F'))) {
 			i += 2;
 			isBinaryWord2 = true;
@@ -128,7 +332,7 @@ char * parenthesize(char * const equation) {
 		} else if (*i == ')' || *i == ']' || *i == '}') {
 			isClosed2 = true;
 		}
-		//NO ERROR MARKER FOR ANDAND
+
 		if ((isBinary1 && isBinary2) || (isBinary1 && isClosed2)
 				|| (isOpen1 && isBinary2)) {
 			std::cerr << "Error! You cannot have a \"" << *i
@@ -188,6 +392,12 @@ char * parenthesize(char * const equation) {
 		if (*i == '=') {
 			++counter4;
 			reachedEquals = true;
+		} else if (*i == '>') {
+			++counter5;
+			reachedEquals = true;
+		} else if (*i == '<') {
+			++counter6;
+			reachedEquals = true;
 		}
 	}
 
@@ -197,22 +407,22 @@ char * parenthesize(char * const equation) {
 					<< std::endl;
 		else if (counter1left > 0)
 			std::cerr
-					<< "Error! More open braces than closed braces on the left side of the \"=\" sign.\n"
+					<< "Error! More open braces than closed braces on the left side of the equation or inequality.\n"
 					<< std::endl;
 		else if (counter1right > 0)
 			std::cerr
-					<< "Error! More open braces than closed braces on the right side of the \"=\" sign.\n"
+					<< "Error! More open braces than closed braces on the right side of the equation or inequality.\n"
 					<< std::endl;
 		else if (counter1 < 0)
 			std::cerr << "Error! More closed braces than closed braces. \n"
 					<< std::endl;
 		else if (counter1left < 0)
 			std::cerr
-					<< "Error! More closed braces than open braces on the left side of the \"=\" sign.\n"
+					<< "Error! More closed braces than open braces on the left side of the equation or inequality.\n"
 					<< std::endl;
 		else if (counter1right < 0)
 			std::cerr
-					<< "Error! More closed braces than open braces on the right side of the \"=\" sign.\n"
+					<< "Error! More closed braces than open braces on the right side of the equation or inequality.\n"
 					<< std::endl;
 		return nullptr;
 	} else if (counter2 != 0 || counter2left != 0 || counter2right != 0) {
@@ -222,11 +432,11 @@ char * parenthesize(char * const equation) {
 					<< std::endl;
 		else if (counter2left > 0)
 			std::cerr
-					<< "Error! More open parentheses than closed parentheses on the left side of the \"=\" sign.\n"
+					<< "Error! More open parentheses than closed parentheses on the left side of the equation or inequality.\n"
 					<< std::endl;
 		else if (counter2right > 0)
 			std::cerr
-					<< "Error! More open parentheses than closed parentheses on the right side of the \"=\" sign.\n"
+					<< "Error! More open parentheses than closed parentheses on the right side of the equation or inequality.\n"
 					<< std::endl;
 		else if (counter2 < 0)
 			std::cerr
@@ -234,11 +444,11 @@ char * parenthesize(char * const equation) {
 					<< std::endl;
 		else if (counter2left < 0)
 			std::cerr
-					<< "Error! More closed parentheses than open parentheses on the left side of the \"=\" sign.\n"
+					<< "Error! More closed parentheses than open parentheses on the left side of the equation or inequality.\n"
 					<< std::endl;
 		else if (counter2right < 0)
 			std::cerr
-					<< "Error! More closed parentheses than open parentheses on the right side of the \"=\" sign.\n"
+					<< "Error! More closed parentheses than open parentheses on the right side of the equation or inequality.\n"
 					<< std::endl;
 		return nullptr;
 	} else if (counter3 != 0 || counter3left != 0 || counter3right != 0) {
@@ -247,26 +457,43 @@ char * parenthesize(char * const equation) {
 					<< std::endl;
 		else if (counter3left > 0)
 			std::cerr
-					<< "Error! More open brackets than closed brackets on the left side of the \"=\" sign.\n"
+					<< "Error! More open brackets than closed brackets on the left side of the equation or inequality.\n"
 					<< std::endl;
 		else if (counter3right > 0)
 			std::cerr
-					<< "Error! More open brackets than closed brackets on the right side of the \"=\" sign.\n"
+					<< "Error! More open brackets than closed brackets on the right side of the equation or inequality.\n"
 					<< std::endl;
 		else if (counter3 < 0)
 			std::cerr << "Error! More closed brackets than closed brackets. \n"
 					<< std::endl;
 		else if (counter3left < 0)
 			std::cerr
-					<< "Error! More closed brackets than open brackets on the left side of the \"=\" sign.\n"
+					<< "Error! More closed brackets than open brackets on the left side of the equation or inequality.\n"
 					<< std::endl;
 		else if (counter3right < 0)
 			std::cerr
-					<< "Error! More closed brackets than open brackets on the right side of the \"=\" sign.\n"
+					<< "Error! More closed brackets than open brackets on the right side of the equation or inequality.\n"
 					<< std::endl;
 		return nullptr;
 	} else if (counter4 > 1) {
 		std::cerr << "Error! Too many \"=\" signs. " << std::endl;
+		return nullptr;
+	} else if (counter5 > 1) {
+		std::cerr << "Error! Too many \">\" signs. " << std::endl;
+		return nullptr;
+	} else if (counter6 > 1) {
+		std::cerr << "Error! Too many \"<\" signs. " << std::endl;
+		return nullptr;
+	} else if ((counter4 > 0 && counter5 > 0)
+			|| (counter6 > 0 && counter4 > 0)) {
+		std::cerr
+				<< "Error! The greater than or equal to sign is not supported. "
+				<< std::endl;
+		return nullptr;
+	} else if (counter6 > 0 && counter5 > 0) {
+		std::cerr
+				<< "Error! You're got a mixture of both \">\" and \"<\" signs in the same equation. "
+				<< std::endl;
 		return nullptr;
 	}
 
@@ -364,11 +591,11 @@ char * parenthesize(char * const equation) {
 	}
 //Now we have to check if there are any illegal variable, constant, or function names.
 
-	if (0 != ::check_names(equation)) {
-		return nullptr;
-	}
+//if (0 != ::check_names(equation)) {
+//	return nullptr;
+//}
 
-	// Temp return. Note that it is returning an invalid address.
+// Temp return. Note that it is returning an invalid address.
 	static char temp = 'a';
 	char * temp_ptr = &temp;
 	return temp_ptr;
@@ -387,11 +614,11 @@ int check_names(char * const equation) {
 		if ((std::islower(*i))) {
 			++i;
 			for (;
-					*i != '+' && *i != '-' && *i != '*' && *i != '/'
-							&& *i != '%' && *i != '!' && *i != '^' && *i != '('
-							&& *i != ')' && *i != '[' && *i != ']' && *i != '{'
-							&& *i != '}' && *i != ';' && *i != '<' && *i != '>'
-							&& *i != '=' && *i != ','
+					*i != ' ' && *i != '+' && *i != '-' && *i != '*'
+							&& *i != '/' && *i != '%' && *i != '!' && *i != '^'
+							&& *i != '(' && *i != ')' && *i != '[' && *i != ']'
+							&& *i != '{' && *i != '}' && *i != ';' && *i != '<'
+							&& *i != '>' && *i != '=' && *i != ','
 							&& !((*i == 'A') && (*(i + 1) == 'N')
 									&& (*(i + 2) == 'D'))
 							&& !((*i == 'O') && (*(i + 1) == 'R'))
@@ -413,7 +640,7 @@ int check_names(char * const equation) {
 							<< std::endl;
 					return 1;
 				} else if (std::isdigit(*i)) {
-					if (std::isalpha(*(i - 1))) {
+					if (std::islower(*(i + 1))) {
 						std::cerr
 								<< "Numbers can only go at the very end of variable names."
 								<< std::endl;
@@ -448,12 +675,12 @@ int check_names(char * const equation) {
 		else if (std::isupper(*i) && std::islower(*(i + 1))) {
 			++i;
 			for (;
-					*i != '+' && *i != '-' && *i != '*' && *i != '/'
-							&& *i != '%' && *i != '!' && *i != '^' && *i != ')'
-							&& *i != '[' && *i != ']' && *i != '{' && *i != '}'
-							&& *i != ';' && *i != '<' && *i != '>' && *i != '='
-							&& *i != ',' && !(isupper(*i)) && !(::isdigit(*i));
-					++i) {
+					*i != ' ' && *i != '+' && *i != '-' && *i != '*'
+							&& *i != '/' && *i != '%' && *i != '!' && *i != '^'
+							&& *i != ')' && *i != '[' && *i != ']' && *i != '{'
+							&& *i != '}' && *i != ';' && *i != '<' && *i != '>'
+							&& *i != '=' && *i != ',' && !(isupper(*i))
+							&& !(::isdigit(*i)); ++i) {
 				if (*i == '(') {
 					break;
 				} else if (*i != '+' && *i != '-' && *i != '*' && *i != '/'
@@ -462,7 +689,7 @@ int check_names(char * const equation) {
 						&& *i != ';' && *i != '<' && *i != '>' && *i != '='
 						&& *i != ',' && !(isupper(*i)) && !(::isdigit(*i))) {
 					std::cerr
-							<< "Error! Functions must consist of a capital letter followed by lowercase letters."
+							<< "Error! Functions must consist of a capital letter followed by lowercase letters followed by parenthesis."
 							<< std::endl;
 					return 1;
 				}

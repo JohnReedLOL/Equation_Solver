@@ -28,6 +28,7 @@
 #include <vector>
 #include <cctype>
 #include <fstream>
+#include <string>
 
 // Note: characters get converted to a 128bit-padded-long-double via std::stold.
 
