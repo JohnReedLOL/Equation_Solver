@@ -19,13 +19,36 @@
  */
 
 #include "Equation_Solver.h"
+#include <tuple> // std::tuple, std::tuple_cat, std::get
+
+
+struct Open {
+	char name;
+	Open(char myName) :
+			name(myName) {
+	}
+}const op('(');
+
+struct Closed {
+	char name;
+	Closed(char myName) :
+			name(myName) {
+	}
+}const clos(']');
+
+struct PlusOrMinus {
+	char name;
+	char numOps;
+	PlusOrMinus(char myName) :
+			name(myName), numOps(0){
+	}
+}const pom('+');
 
 struct BinaryOp {
 	char name;
 	BinaryOp(char myName) :
 			name(myName) {
 	}
-	;
 }const bop('*');
 
 struct UnaryOp {
@@ -33,7 +56,6 @@ struct UnaryOp {
 	UnaryOp(char myName) :
 			name(myName) {
 	}
-	;
 }const unop('-');
 
 struct BinaryWord {
@@ -41,7 +63,6 @@ struct BinaryWord {
 	BinaryWord(std::string myString) :
 			name(myString) {
 	}
-	;
 }const bword("AND");
 
 struct UnaryWord {
@@ -49,7 +70,6 @@ struct UnaryWord {
 	UnaryWord(std::string myString) :
 			name(myString) {
 	}
-	;
 }const unword("NOT");
 
 struct Constant {
@@ -58,11 +78,9 @@ struct Constant {
 	Constant(std::string myString) :
 			name(myString) {
 	}
-	;
 	Constant(std::string myName, std::string myDef) :
 			name(myName), def(myDef) {
 	}
-	;
 }const con("C", "5.5^2");
 
 struct Variable {
@@ -71,11 +89,9 @@ struct Variable {
 	Variable(std::string myString) :
 			name(myString), def("undef") {
 	}
-	;
 	Variable(std::string myName, std::string myDef) :
 			name(myName), def(myDef) {
 	}
-	;
 }const var("x", "5.6");
 
 struct Function {
@@ -84,36 +100,36 @@ struct Function {
 	Function(std::string myString) :
 			name(myString), def("undef") {
 	}
-	;
 	Function(std::string myName, std::string myDef) :
 			name(myName), def(myDef) {
 	}
-	;
 }const func("Func()", "x+7;x-2; if x=3 : x=7;");
 
+//Will use a plain bool in the template instead.
 struct BLit {
 	bool val;
 	BLit(bool myVal) :
 			val(myVal) {
 	}
-	;
 }const blit(true);
 
 struct BInt {
 	long num;
 	long denom;
+	BInt(long myNum) :
+				num(myNum), denom(1LL) {
+		}
 	BInt(long myNum, long myDenom) :
 			num(myNum), denom(myDenom) {
 	}
-	;
 }const bint(7l, 1l);
 
+//Will use a plain long double in the template instead
 struct BDec {
 	long double dec;
 	BDec(long double myDec) :
 			dec(myDec) {
 	}
-	;
 }const bdec(5.5L);
 
 char * parenthesize(char * const equation) {
@@ -132,7 +148,7 @@ char * parenthesize(char * const equation) {
 	int counter3left = 0;
 	int counter3right = 0;
 
-	//Max 1 line per equation.
+	//Max 1 line per equation. NO SUPPORT YET FOR COMMA OR SEMICOLON.
 	for (char * i = equation;
 			(*i != '\0') && (*i != (char) 10) && (*i != (char) 13); ++i) {
 		if (((int) (*i)) < 32 || ((int) (*i)) > 125 || *i == '!'
@@ -170,6 +186,16 @@ char * parenthesize(char * const equation) {
 
 		bool isPlusMinus1 = false;
 		bool isPlusMinus2 = false;
+
+		std::tuple<std::string> equation_tuple ("START");
+
+		//auto first = std::make_tuple (10,'a');
+
+		//std::tuple <std::string> mytuple ("START");
+
+		//perhaps add a space to the end of tokens.
+		//(*(i+9)=='\0')&&(*(i+9)==(char)10)&&(*(i+9)==(char)13)&&(*(i+9)==(char)32)
+		// TRUE ANDOVER = TRUE AND OVER - assumes OVER is a boolean. FALSE AND.
 
 		if ((std::islower(*i))) {
 			isVariable1 = true;
@@ -213,20 +239,21 @@ char * parenthesize(char * const equation) {
 		} else if (std::isupper(*i) && std::islower(*(i + 1))) {
 			isFunction1 = true;
 			++i;
-			for (;
-					*i != ' ' && *i != '+' && *i != '-' && *i != '*'
-							&& *i != '/' && *i != '%' && *i != '!' && *i != '^'
-							&& *i != ')' && *i != '[' && *i != ']' && *i != '{'
-							&& *i != '}' && *i != ';' && *i != '<' && *i != '>'
-							&& *i != '=' && *i != ',' && !(isupper(*i))
-							&& !(::isdigit(*i)); ++i) {
+			while (true ) {
 				if (*i == '(') {
+					char * functionOpenPtr = i;
+					while(*i != ')')
+					{
+						++i;
+					}
+					char * functionClosedPtr = i;
+					//CREATE A FUNCTION STRUCT WITH DEFINITION BETWEEN THE TWO PTRS!!!.
 					break;
-				} else if (*i != '+' && *i != '-' && *i != '*' && *i != '/'
-						&& *i != '%' && *i != '!' && *i != '^' && *i != ')'
-						&& *i != '[' && *i != ']' && *i != '{' && *i != '}'
-						&& *i != ';' && *i != '<' && *i != '>' && *i != '='
-						&& *i != ',' && !(isupper(*i)) && !(::isdigit(*i))) {
+				} else if (*i == ' ' || *i == '+' || *i == '-' || *i == '*' || *i == '/'
+						|| *i == '%' || *i == '^' || *i == ')'
+						|| *i == '[' || *i == ']' || *i == '{' || *i == '}'
+						|| *i == ';' || *i == '<' || *i == '>' || *i == '='
+						|| *i == ',' || (isupper(*i)) || (::isdigit(*i))) {
 					std::cerr
 							<< "Error! Functions must consist of a capital letter followed by lowercase letters followed by parenthesis."
 							<< std::endl;
@@ -234,6 +261,7 @@ char * parenthesize(char * const equation) {
 					return nullptr;
 				}
 				//Else increment to the next lowercase character.
+				++i;
 			}
 		} else if (*i == '*' || *i == '/' || *i == '%' || *i == '^' || *i == '+'
 				|| *i == '-' || *i == '<' || *i == '>' || *i == '=') {
