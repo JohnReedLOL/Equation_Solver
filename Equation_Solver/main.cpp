@@ -156,7 +156,7 @@ int main(int argc, char **argv)
 	}
 	else // 6 null terminating null characters at the end.
 	{
-		equation[string_Length] = '\0';
+		equation[string_Length] = ' '; //Trailing space for logical token recognition.
 		equation[string_Length+1] = '\0';
 		equation[string_Length+2] = '\0';
 		equation[string_Length+3] = '\0';
