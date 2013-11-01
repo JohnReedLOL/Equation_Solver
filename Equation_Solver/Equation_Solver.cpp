@@ -133,7 +133,7 @@ struct BDec {
 	}
 }const bdec(5.5L);
 
-char * parenthesize(char * const equation) {
+char * parenthesize(std::string equation) {
 	int counter1 = 0;
 	int counter2 = 0;
 	int counter3 = 0;
