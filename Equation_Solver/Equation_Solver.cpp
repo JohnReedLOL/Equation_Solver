@@ -44,6 +44,7 @@ struct PlusOrMinus {
 	}
 }const pom('+');
 
+//Note: Comma and semicolon are binary ops
 struct BinaryOp {
 	char name;
 	BinaryOp(char myName) :
@@ -168,7 +169,7 @@ char * parenthesize(char * const equation) {
 		bool isConstant1 = false;
 		bool isVariable1 = false;
 		bool isFunction1 = false;
-		//Add litaral checking support.
+		
 		bool BLit1 = false;
 		bool BDec1 = false;
 		bool BInt1 = false;
@@ -199,6 +200,7 @@ char * parenthesize(char * const equation) {
 
 		if ((std::islower(*i))) {
 			isVariable1 = true;
+			char * start = i;
 
 			++i;
 			for (;
@@ -207,21 +209,22 @@ char * parenthesize(char * const equation) {
 							&& *i != '(' && *i != ')' && *i != '[' && *i != ']'
 							&& *i != '{' && *i != '}' && *i != ';' && *i != '<'
 							&& *i != '>' && *i != '=' && *i != ','
-							&& !((*i == 'A') && (*(i + 1) == 'N')
-									&& (*(i + 2) == 'D'))
-							&& !((*i == 'O') && (*(i + 1) == 'R'))
-							&& !((*i == 'X') && (*(i + 1) == 'O')
-									&& (*(i + 2) == 'R'))
-							&& !((*i == 'N') && (*(i + 1) == 'O')
-									&& (*(i + 2) == 'T'))
-							&& !((*i == 'I') && (*(i + 1) == 'F'))
-							&& !((*i == 'I') && (*(i + 1) == 'F')
-									&& (*(i + 1) == 'F'))
-							&& !((*i == 'T') && (*(i + 1) == 'R')
-									&& (*(i + 2) == 'U') && (*(i + 3) == 'E'))
-							&& !((*i == 'F') && (*(i + 1) == 'A')
-									&& (*(i + 2) == 'L') && (*(i + 3) == 'S')
-									&& (*(i + 4) == 'E')); ++i) {
+							
+							&& !((*i == 'A') && (*(i + 1) == 'N') && (*(i + 2) == 'D') && (*(i + 3) == ' '))
+							
+							&& !((*i == 'O') && (*(i + 1) == 'R') && (*(i + 2) == ' '))
+							
+							&& !((*i == 'X') && (*(i + 1) == 'O' ) && (*(i + 2) == 'R') && (*(i + 3) == ' '))
+							
+							&& !((*i == 'N') && (*(i + 1) == 'O') && (*(i + 2) == 'T') && (*(i + 3) == ' '))
+							
+							&& !((*i == 'I') && (*(i + 1) == 'F')&& (*(i + 2) == ' '))
+							
+							&& !((*i == 'I') && (*(i + 1) == 'F') && (*(i + 2) == 'F') && (*(i + 3) == ' '))
+							
+							&& !((*i == 'T') && (*(i + 1) == 'R') && (*(i + 2) == 'U') && (*(i + 3) == 'E') && (*(i + 4) == ' '))
+							
+							&& !((*i == 'F') && (*(i + 1) == 'A')&& (*(i + 2) == 'L') && (*(i + 3) == 'S')&& (*(i + 4) == 'E') && (*(i + 5) == ' ')); ++i) {
 				if (std::isupper(*i)) {
 					std::cerr
 							<< "Variable names must start with a lowercase letter and cannot contain uppercase letters."
@@ -236,7 +239,11 @@ char * parenthesize(char * const equation) {
 					}
 				}
 			}
+			char * onePastEnd = i;
+			std::string name = 
 		} else if (std::isupper(*i) && std::islower(*(i + 1))) {
+			//AN UPPER FOLLOWED BY A LOWER COULD ALSO BE IN FORM: "Ax1 + Bx2 = 7 - Ax1"
+			// Solution: 2Ax1 + Bx2 - 7 = 0;
 			isFunction1 = true;
 			++i;
 			while (true ) {
