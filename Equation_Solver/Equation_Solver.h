@@ -76,7 +76,7 @@ struct imaginary_number
 * @param equation The equation that goes into the parenthesizer.
 * @return The equation with extra parenthesis set up to explicitly define order of computation.
 */
-char * parenthesize(char * const equation);
+char * parenthesize(std::string equation);
 
 /**
 * The simplify function breaks down an equation by simplifying the expression in the innermost parenthesis. It determines whether an expression is binary orunary and then hands the job to the binary or unary simplify functions.
