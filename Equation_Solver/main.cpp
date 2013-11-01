@@ -141,29 +141,18 @@ int main(int argc, char **argv)
 		std::fclose(file_ptr);
 	}
 	std::puts("If this is your first time using this program, make sure to look in my current folder for the instructions.");
-	char equation[23000];
+	//char equation[23000];
+	std::string myEquation;
+	{
+	std::string equation;
 	std::puts("After you've looked at the instructions, write an equation using the symbols +, -, *, /, %, ^, (,), <, >, and =. ");
-	std::cin.getline (equation,15006);
-	const int string_Length = std::cin.gcount();
-	if( string_Length > 10000)
-	{
-		std::puts("You are approaching the 15000 character limit.\n");
+	std::getline (std::cin,equation);
+	std::string cat = {' ', ' ',' ',' ',' ',' '}; //Trailing spaces for logical token recognition.
+	myEquation = equation + cat;
+	//delete equation.
 	}
-	if( string_Length > 15000)
-	{
-		std::puts("You just went over the 15000 character limit. Equation_Solver terminating.\n");
-		return 1;
-	}
-	else // 6 null terminating null characters at the end.
-	{
-		equation[string_Length] = ' '; //Trailing space for logical token recognition.
-		equation[string_Length+1] = '\0';
-		equation[string_Length+2] = '\0';
-		equation[string_Length+3] = '\0';
-		equation[string_Length+4] = '\0';
-		equation[string_Length+5] = '\0';
-	}
-	if (::parenthesize(equation) == nullptr)
+	
+	if (::parenthesize(myEquation) == nullptr)
 	{
 		std::puts("Closing program due to error.\n");
 		return 1;
