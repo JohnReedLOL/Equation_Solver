@@ -21,8 +21,12 @@
 #include "Equation_Solver.h"
 
 
-enum Type { open, closed, plusOrMinus, binaryOp, unaryOp, binaryWord
-                 , unaryWord, constant, variable, function, bliteral, intliteral, decliteral };
+enum Type { begin, open, closed, plusOrMinus, binaryOp, unaryOp, binaryWord
+                 , unaryWord, constant, variable, function, bliteral, intliteral, decliteral, end };
+
+struct Begin {
+//Begin marks the end of the vector of tokens. For example, " *3 " = " Start*3 ", which would be invalid.	
+};
 
 struct Open {
 	char * name;
@@ -34,6 +38,7 @@ struct Closed {
 
 struct PlusOrMinus {
 	char * name;
+	int numOperands;
 };
 
 //Note: Comma and semicolon are binary ops
@@ -74,6 +79,10 @@ struct Function {
 	char * nameEnd;
 	char * defBegin;
 	char * defEnd;
+};
+
+struct End {
+//End marks the end of the vector of tokens. For example, "1+2+" = "1+2+End", which is invalid.	
 };
 
 //Will use a plain bool in the template instead.
