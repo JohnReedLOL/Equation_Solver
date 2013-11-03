@@ -52,15 +52,18 @@ struct UnaryOp {
 
 struct BinaryWord {
 	char * nameBeg;
-	char * nameEnd;
+	//char * nameEnd; - Words will be null terminated
 };
 
 struct UnaryWord {
 	char * nameBeg;
-	char * nameEnd;
+	//char * nameEnd; - Words will be null terminated
 };
 
 struct Constant {
+	// Constants will point to their origional definition in Equation_Solver_Constants
+	//or in the input line.
+	// Undefined constants will have a nullptr definition.
 	char * nameBeg;
 	char * nameEnd;
 	char * defBegin;
@@ -68,6 +71,9 @@ struct Constant {
 };
 
 struct Variable {
+	// Variables will point to their origional definition
+	//in the input line.
+	// Undefined variables will have a nullptr definition.
 	char * nameBeg;
 	char * nameEnd;
 	char * defBegin;
@@ -75,21 +81,21 @@ struct Variable {
 };
 
 struct Function {
+	// Functions will point to their origional definition in Equation_Solver_Functions
+	//or in the input line.
+	// Undefined functions cannot exist because functions cannot be defined during runtime.
 	char * nameBeg;
 	char * nameEnd;
 	char * defBegin;
 	char * defEnd;
 };
 
-struct End {
-//End marks the end of the vector of tokens. For example, "1+2+" = "1+2+End", which is invalid.	
-};
-
 //Will use a plain bool in the template instead.
 struct BLit {
 	bool val;
-	char * nameBeg;
-	char * nameEnd;
+	//Name unnecessary because bool val can be printed.
+	//char * nameBeg; // = "TRUE" or "FALSE" null terminated.
+	//char * nameEnd; - not necesary
 };
 
 struct BInt {
@@ -97,15 +103,19 @@ struct BInt {
 	long denom;
 	long inum;
 	long idenom;
-	char * nameBeg;
-	char * nameEnd;
+	//char * nameBeg;
+	//char * nameEnd;
 };
 
 struct BDec {
 	long double dec;
 	long double idec;
-	char * nameBeg;
-	char * nameEnd;
+	//char * nameBeg;
+	//char * nameEnd;
+};
+
+struct End {
+//End marks the end of the vector of tokens. For example, "1+2+" = "1+2+End", which is invalid.	
 };
 
 struct token {
