@@ -19,8 +19,10 @@
  */
 
 #include "Equation_Solver.h"
-#include <tuple> // std::tuple, std::tuple_cat, std::get
 
+
+enum Type { open, closed, plusOrMinus, binaryOp, unaryOp, binaryWord
+                 , unaryWord, constant, variable, function, bliteral, intliteral, decliteral };
 
 struct Open {
 	char name;
