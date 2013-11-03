@@ -25,115 +25,98 @@ enum Type { open, closed, plusOrMinus, binaryOp, unaryOp, binaryWord
                  , unaryWord, constant, variable, function, bliteral, intliteral, decliteral };
 
 struct Open {
-	char name;
-	Open(char myName) :
-			name(myName) {
-	}
-}const op('(');
+	char * name;
+};
 
 struct Closed {
-	char name;
-	Closed(char myName) :
-			name(myName) {
-	}
-}const clos(']');
+	char * name;
+};
 
 struct PlusOrMinus {
-	char name;
-	char numOps;
-	PlusOrMinus(char myName) :
-			name(myName), numOps(0){
-	}
-}const pom('+');
+	char * name;
+};
 
 //Note: Comma and semicolon are binary ops
 struct BinaryOp {
-	char name;
-	BinaryOp(char myName) :
-			name(myName) {
-	}
-}const bop('*');
+	char * name;
+};
 
 struct UnaryOp {
-	char name;
-	UnaryOp(char myName) :
-			name(myName) {
-	}
-}const unop('-');
+	char * name;
+};
 
 struct BinaryWord {
-	std::string name;
-	BinaryWord(std::string myString) :
-			name(myString) {
-	}
-}const bword("AND");
+	char * nameBeg;
+	char * nameEnd;
+};
 
 struct UnaryWord {
-	std::string name;
-	UnaryWord(std::string myString) :
-			name(myString) {
-	}
-}const unword("NOT");
+	char * nameBeg;
+	char * nameEnd;
+};
 
 struct Constant {
-	std::string name;
-	std::string def;
-	Constant(std::string myString) :
-			name(myString) {
-	}
-	Constant(std::string myName, std::string myDef) :
-			name(myName), def(myDef) {
-	}
-}const con("C", "5.5^2");
+	char * nameBeg;
+	char * nameEnd;
+	char * defBegin;
+	char * defEnd;
+};
 
 struct Variable {
-	std::string name;
-	std::string def;
-	Variable(std::string myString) :
-			name(myString), def("undef") {
-	}
-	Variable(std::string myName, std::string myDef) :
-			name(myName), def(myDef) {
-	}
-}const var("x", "5.6");
+	char * nameBeg;
+	char * nameEnd;
+	char * defBegin;
+	char * defEnd;
+};
 
 struct Function {
-	std::string name;
-	std::string def;
-	Function(std::string myString) :
-			name(myString), def("undef") {
-	}
-	Function(std::string myName, std::string myDef) :
-			name(myName), def(myDef) {
-	}
-}const func("Func()", "x+7;x-2; if x=3 : x=7;");
+	char * nameBeg;
+	char * nameEnd;
+	char * defBegin;
+	char * defEnd;
+};
 
 //Will use a plain bool in the template instead.
 struct BLit {
 	bool val;
-	BLit(bool myVal) :
-			val(myVal) {
-	}
-}const blit(true);
+	char * nameBeg;
+	char * nameEnd;
+};
 
 struct BInt {
 	long num;
 	long denom;
-	BInt(long myNum) :
-				num(myNum), denom(1LL) {
-		}
-	BInt(long myNum, long myDenom) :
-			num(myNum), denom(myDenom) {
-	}
-}const bint(7l, 1l);
+	long inum;
+	long idenom;
+	char * nameBeg;
+	char * nameEnd;
+};
 
-//Will use a plain long double in the template instead
 struct BDec {
 	long double dec;
-	BDec(long double myDec) :
-			dec(myDec) {
-	}
-}const bdec(5.5L);
+	long double idec;
+	char * nameBeg;
+	char * nameEnd;
+};
+
+struct token {
+	Type myType;
+	union {
+    	Open 		myOpen;
+    	Closed 		myClosed;
+    	PlusOrMinus 	myPlusOrMinus;
+    	BinaryOp 	myBinaryOp;
+    	UnaryOp 	myUnaryOp;
+    	BinaryWord 	myBinaryWord;
+    	UnaryWord 	myUnaryWord;
+    	Constant 	myConstant;
+    	Variable	myVariable;
+    	Function	myFunction;
+    	BLit		myBLit;
+    	BInt		myBInt;
+    	BDec		myBDec;
+  	};
+}
 
 char * parenthesize(std::string equation) {
 	int counter1 = 0;
