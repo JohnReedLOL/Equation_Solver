@@ -93,10 +93,32 @@ char * parenthesize(std::string equation) {
 		
 		if(*i == '(' || *i == '[' || *i == '{')
 		{
-			Open my_open = {''};
+			Open my_open = {*i};
 			Token open_tok = {open, my_open};
 			my_equation.push_back(start_tok);
 		}
+		else if(*i == ')' || *i == ']' || *i == '}')
+		{
+			Closed my_closed = {*i};
+			Token closed_tok = {closed, my_closed};
+			my_equation.push_back(closed_tok);
+		}
+		else if(*i == '+' || *i == '-')
+		{
+			PlusOrMinus my_pm = {*i,0};
+			Token pm_tok = {plusOrMinus, my_pm};
+			my_equation.push_back(pm_tok);
+		}
+		else if(*i == ',' || *i == ';' 
+		|| *i == '*' || *i == '/' || *i == '%' 
+		|| *i == '^' || *i == '+' || *i == '-' 
+		|| *i == '<' || *i == '>' || *i == '=')
+		{
+			BinaryOp my_bi = {*i};
+			Token bi_tok = {binaryOp, my_bi};
+			my_equation.push_back(bi_tok);
+		}
+		else if() //CONTINUE FROM HERE
 		else if ((std::islower(*i))) {
 			isVariable1 = true;
 			Variable my_variable = {i, nullptr, nullptr, nullptr};
