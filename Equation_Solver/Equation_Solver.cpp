@@ -20,105 +20,25 @@
 
 #include "Equation_Solver.h"
 
-
-enum Type { begin, open, closed, plusOrMinus, binaryOp, unaryOp, binaryWord
-                 , unaryWord, constant, variable, function, bliteral, intliteral, decliteral, end };
-
-struct Begin {
-//Begin marks the end of the vector of tokens. For example, " *3 " = " Start*3 ", which would be invalid.	
-};
-
-struct Open {
-	char * name;
-};
-
-struct Closed {
-	char * name;
-};
-
-struct PlusOrMinus {
-	char * name;
-	int numOperands;
-};
-
-//Note: Comma and semicolon are binary ops
-struct BinaryOp {
-	char * name;
-};
-
-struct UnaryOp {
-	char * name;
-};
-
-struct BinaryWord {
-	char * nameBeg;
-	//char * nameEnd; - Words will be null terminated
-};
-
-struct UnaryWord {
-	char * nameBeg;
-	//char * nameEnd; - Words will be null terminated
-};
-
-struct Constant {
-	// Constants will point to their origional definition in Equation_Solver_Constants
-	//or in the input line.
-	// Undefined constants will have a nullptr definition.
-	char * nameBeg;
-	char * nameEnd;
-	char * defBegin;
-	char * defEnd;
-};
-
-struct Variable {
-	// Variables will point to their origional definition
-	//in the input line.
-	// Undefined variables will have a nullptr definition.
-	char * nameBeg;
-	char * nameEnd;
-	char * defBegin;
-	char * defEnd;
-};
-
-struct Function {
-	// Functions will point to their origional definition in Equation_Solver_Functions
-	//or in the input line.
-	// Undefined functions cannot exist because functions cannot be defined during runtime.
-	char * nameBeg;
-	char * nameEnd;
-	char * defBegin;
-	char * defEnd;
-};
-
-//Will use a plain bool in the template instead.
-struct BLit {
-	bool val;
-	//Name unnecessary because bool val can be printed.
-	//char * nameBeg; // = "TRUE" or "FALSE" null terminated.
-	//char * nameEnd; - not necesary
-};
-
-struct BInt {
-	long num;
-	long denom;
-	long inum;
-	long idenom;
-	//char * nameBeg;
-	//char * nameEnd;
-};
-
-struct BDec {
-	long double dec;
-	long double idec;
-	//char * nameBeg;
-	//char * nameEnd;
-};
-
-struct End {
-//End marks the end of the vector of tokens. For example, "1+2+" = "1+2+End", which is invalid.	
-};
-
-struct token {
+enum Type { start, open, closed, plusOrMinus, binaryOp, unaryOp, binaryWord
+           , unaryWord, constant, variable, function, bliteral
+           , intliteral, decliteral, end };
+struct Start {};
+struct Open {char name;};
+struct Closed {char name;};
+struct PlusOrMinus {char name;int numOperands;};
+struct BinaryOp {char name;};
+struct UnaryOp {char name;};
+struct BinaryWord {std::string name;};
+struct UnaryWord {std::string name;};
+struct Constant {std::string name;std::string def;};
+struct Variable {std::string name;std::string def;};
+struct Function {std::string name;std::string def;};
+//Will use a plain bool - no struct necessary.
+struct BInt {long num; long denom; long inum; long idenom;};
+struct BDec {long double dec; long double idec;};
+struct End {};
+struct Token {
 	Type myType;
 	union {
     	Open 		myOpen;
@@ -131,7 +51,7 @@ struct token {
     	Constant 	myConstant;
     	Variable	myVariable;
     	Function	myFunction;
-    	BLit		myBLit;
+    	bool		myBool;
     	BInt		myBInt;
     	BDec		myBDec;
   	};
@@ -165,47 +85,22 @@ char * parenthesize(std::string equation) {
 					<< "\" symbol." << std::endl;
 			return nullptr;
 		}
-
-		bool isBinary1 = false;
-		bool isBinaryWord1 = false;
-		bool isOpen1 = false;
-
-		bool isConstant1 = false;
-		bool isVariable1 = false;
-		bool isFunction1 = false;
 		
-		bool BLit1 = false;
-		bool BDec1 = false;
-		bool BInt1 = false;
-
-		bool isBinary2 = false;
-		bool isBinaryWord2 = false;
-		bool isClosed2 = false;
-
-		bool isConstant2 = false;
-		bool isVariable2 = false;
-		bool isFunction2 = false;
-		bool BLit2 = false;
-		bool BDec2 = false;
-		bool BInt2 = false;
-
-		bool isPlusMinus1 = false;
-		bool isPlusMinus2 = false;
-
-		std::tuple<std::string> equation_tuple ("START");
-
-		//auto first = std::make_tuple (10,'a');
-
-		//std::tuple <std::string> mytuple ("START");
-
-		//perhaps add a space to the end of tokens.
-		//(*(i+9)=='\0')&&(*(i+9)==(char)10)&&(*(i+9)==(char)13)&&(*(i+9)==(char)32)
-		// TRUE ANDOVER = TRUE AND OVER - assumes OVER is a boolean. FALSE AND.
-
-		if ((std::islower(*i))) {
+		std::vector<Token>my_equation;
+		Start my_start;
+		Token start_tok = {start, my_start};
+		my_equation.push_back(start_tok);
+		
+		if(*i == '(' || *i == '[' || *i == '{')
+		{
+			Open my_open = {''};
+			Token open_tok = {open, my_open};
+			my_equation.push_back(start_tok);
+		}
+		else if ((std::islower(*i))) {
 			isVariable1 = true;
-			char * start = i;
-
+			Variable my_variable = {i, nullptr, nullptr, nullptr};
+			
 			++i;
 			for (;
 					*i != ' ' && *i != '+' && *i != '-' && *i != '*'
@@ -243,8 +138,9 @@ char * parenthesize(std::string equation) {
 					}
 				}
 			}
-			char * onePastEnd = i;
-			std::string name = 
+			my_variable.nameEnd = i;
+			Token var_tok = {variable, my_variable};
+			my_equation.push_back(var_tok);
 		} else if (std::isupper(*i) && std::islower(*(i + 1))) {
 			//AN UPPER FOLLOWED BY A LOWER COULD ALSO BE IN FORM: "Ax1 + Bx2 = 7 - Ax1"
 			// Solution: 2Ax1 + Bx2 - 7 = 0;
