@@ -21,7 +21,7 @@
 #include "Equation_Solver.h"
 
 enum Type { start, open, closed, plusOrMinus, binaryOp, unaryOp, binaryWord
-           , unaryWord, constant, variable, function, bliteral
+           , constant, variable, function, bliteral
            , intliteral, decliteral, end };
 struct Start {};
 struct Open {char name;};
@@ -44,7 +44,7 @@ struct Token {
     	Closed 		myClosed;
     	PlusOrMinus 	myPlusOrMinus;
     	BinaryOp 	myBinaryOp;
-    	UnaryOp 	myUnaryOp;
+    	//No unary op because + - have own type.
     	BinaryWord 	myBinaryWord;
     	UnaryWord 	myUnaryWord;
     	Constant 	myConstant;
@@ -141,34 +141,77 @@ char * parenthesize(std::string equation) {
 			Token tok = {binaryOp, my_word};
 			my_equation.push_back(tok);
 			i+=4;
-		}//CONTINUE HERE
+		}
 		else if( ((*i == 'I') && (*(i + 1) == 'F')&& (*(i + 2) == ' ')) ) 
 		{
-			BinaryWord my_word = {"AND"};
+			BinaryWord my_word = {"IF"};
+			Token tok = {binaryOp, my_word};
+			my_equation.push_back(tok);
+			i+=3;
+		}
+		else if( ((*i == 'I') && (*(i + 1) == 'F') && (*(i + 2) == 'F') && (*(i + 3) == ' ')) ) 
+		{
+			BinaryWord my_word = {"IFF"};
 			Token tok = {binaryOp, my_word};
 			my_equation.push_back(tok);
 			i+=4;
 		}
-		else if( ((*i == 'A') && (*(i + 1) == 'N') && (*(i + 2) == 'D') && (*(i + 3) == ' ')) ) 
+		else if(((*i == 'N') && (*(i + 1) == 'O' ) && (*(i + 2) == 'T') && (*(i + 3) == ' ')) )
 		{
-			BinaryWord my_word = {"AND"};
-			Token tok = {binaryOp, my_word};
+			UnaryWord my_word = {"NOT"};
+			Token tok = {unaryOp, my_word};
 			my_equation.push_back(tok);
 			i+=4;
 		}
-		else if( ((*i == 'A') && (*(i + 1) == 'N') && (*(i + 2) == 'D') && (*(i + 3) == ' ')) ) 
-		{
-			BinaryWord my_word = {"AND"};
-			Token tok = {binaryOp, my_word};
-			my_equation.push_back(tok);
-			i+=4;
-		}
-		else if( ((*i == 'A') && (*(i + 1) == 'N') && (*(i + 2) == 'D') && (*(i + 3) == ' ')) ) 
-		{
-			BinaryWord my_word = {"AND"};
-			Token tok = {binaryOp, my_word};
-			my_equation.push_back(tok);
-			i+=4;
+		else if (std::isupper(*i) && std::islower(*(i + 1))) { //A table search must occur.
+			//AN UPPER FOLLOWED BY A LOWER COULD ALSO BE IN FORM: "Ax1 + Bx2 = 7 - Ax1"
+			// Solution: 2Ax1 + Bx2 - 7 = 0;
+			isFunction1 = true;
+			++i;
+			while (true ) {
+				if (*i == '(') {
+					char * functionOpenPtr = i;
+					while(*i != ')')
+					{
+						++i;
+					}
+					char * functionClosedPtr = i;
+					//CREATE A FUNCTION STRUCT WITH DEFINITION BETWEEN THE TWO PTRS!!!.
+					break;
+				} else if (*i == ' ' || *i == '+' || *i == '-' || *i == '*' || *i == '/'
+						|| *i == '%' || *i == '^' || *i == ')'
+						|| *i == '[' || *i == ']' || *i == '{' || *i == '}'
+						|| *i == ';' || *i == '<' || *i == '>' || *i == '='
+						|| *i == ',' || (isupper(*i)) || (::isdigit(*i))) {
+					std::cerr
+							<< "Error! Functions must consist of a capital letter followed by lowercase letters followed by parenthesis."
+							<< std::endl;
+
+					return nullptr;
+				}
+				//Else increment to the next lowercase character.
+				++i;
+			}
+		} 
+		else if (std::isupper(*i)) {
+			isConstant1 = true;
+			++i;
+			while (*i != ' ' && *i != '+' && *i != '-' && *i != '*' && *i != '/'
+					&& *i != '%' && *i != '!' && *i != '^' && *i != ')'
+					&& *i != ')' && *i != '[' && *i != ']' && *i != '{'
+					&& *i != '}' && *i != ';' && *i != '<' && *i != '>'
+					&& *i != '=' && *i != ',' && !(islower(*i))) {
+				++i;
+				if (std::isdigit(*i)) {
+					if (std::isupper(*(i + 1))) {
+						std::cerr
+								<< "Numbers can only go at the very end of a constant."
+								<< std::endl;
+						return nullptr;
+					}
+				}
+			}
+			//Else increment to the next lowercase character.
 		}
 		else if ((std::islower(*i))) {
 			isVariable1 = true;
@@ -214,91 +257,8 @@ char * parenthesize(std::string equation) {
 			my_variable.nameEnd = i;
 			Token var_tok = {variable, my_variable};
 			my_equation.push_back(var_tok);
-		} else if (std::isupper(*i) && std::islower(*(i + 1))) {
-			//AN UPPER FOLLOWED BY A LOWER COULD ALSO BE IN FORM: "Ax1 + Bx2 = 7 - Ax1"
-			// Solution: 2Ax1 + Bx2 - 7 = 0;
-			isFunction1 = true;
-			++i;
-			while (true ) {
-				if (*i == '(') {
-					char * functionOpenPtr = i;
-					while(*i != ')')
-					{
-						++i;
-					}
-					char * functionClosedPtr = i;
-					//CREATE A FUNCTION STRUCT WITH DEFINITION BETWEEN THE TWO PTRS!!!.
-					break;
-				} else if (*i == ' ' || *i == '+' || *i == '-' || *i == '*' || *i == '/'
-						|| *i == '%' || *i == '^' || *i == ')'
-						|| *i == '[' || *i == ']' || *i == '{' || *i == '}'
-						|| *i == ';' || *i == '<' || *i == '>' || *i == '='
-						|| *i == ',' || (isupper(*i)) || (::isdigit(*i))) {
-					std::cerr
-							<< "Error! Functions must consist of a capital letter followed by lowercase letters followed by parenthesis."
-							<< std::endl;
-
-					return nullptr;
-				}
-				//Else increment to the next lowercase character.
-				++i;
-			}
-		} else if (*i == '*' || *i == '/' || *i == '%' || *i == '^' || *i == '+'
-				|| *i == '-' || *i == '<' || *i == '>' || *i == '=') {
-			++i;
-			isBinary1 = true;
-			if (*i == '+' || *i == '-')
-				isPlusMinus1 = true;
-
-		} else if (((*i == 'I') && (*(i + 1) == 'F'))) {
-			i += 2;
-			isBinaryWord1 = true;
-		} else if (((*i == 'O') && (*(i + 1) == 'R'))) {
-			i += 2;
-			isBinaryWord1 = true;
-		} else if (((*i == 'A') && (*(i + 1) == 'N') && (*(i + 2) == 'D'))) {
-			i += 3;
-			isBinaryWord1 = true;
-		} else if (((*i == 'X') && (*(i + 1) == 'O') && (*(i + 2) == 'R'))) {
-			i += 3;
-			isBinaryWord1 = true;
-		} else if (((*i == 'N') && (*(i + 1) == 'O') && (*(i + 2) == 'T'))) {
-			i += 3;
-			isBinaryWord1 = true;
-		} else if (((*i == 'I') && (*(i + 1) == 'F') && (*(i + 1) == 'F'))) {
-			i += 3;
-			isBinaryWord1 = true;
-		} else if (((*i == 'T') && (*(i + 1) == 'R') && (*(i + 2) == 'U')
-				&& (*(i + 3) == 'E'))) {
-			i += 4;
-			isBinaryWord1 = true;
-		} else if (((*i == 'F') && (*(i + 1) == 'A') && (*(i + 2) == 'L')
-				&& (*(i + 3) == 'S') && (*(i + 4) == 'E'))) {
-			i += 5;
-			isBinaryWord1 = true;
-		} else if (*i == '(' || *i == '[' || *i == '{') {
-			++i;
-			isOpen1 = true;
-		} else if (std::isupper(*i)) {
-			isConstant1 = true;
-			++i;
-			while (*i != ' ' && *i != '+' && *i != '-' && *i != '*' && *i != '/'
-					&& *i != '%' && *i != '!' && *i != '^' && *i != ')'
-					&& *i != ')' && *i != '[' && *i != ']' && *i != '{'
-					&& *i != '}' && *i != ';' && *i != '<' && *i != '>'
-					&& *i != '=' && *i != ',' && !(islower(*i))) {
-				++i;
-				if (std::isdigit(*i)) {
-					if (std::isupper(*(i + 1))) {
-						std::cerr
-								<< "Numbers can only go at the very end of a constant."
-								<< std::endl;
-						return nullptr;
-					}
-				}
-			}
-			//Else increment to the next lowercase character.
-		}
+		} 
+		
 
 		//ignore whitespace between words.
 		while (*i == ' ') {
