@@ -128,6 +128,48 @@ char * parenthesize(std::string equation) {
 			my_equation.push_back(tok);
 			i+=4;
 		}
+		else if( ((*i == 'O') && (*(i + 1) == 'R') && (*(i + 2) == ' ')) ) 
+		{
+			BinaryWord my_word = {"OR"};
+			Token tok = {binaryOp, my_word};
+			my_equation.push_back(tok);
+			i+=3;
+		}
+		else if(((*i == 'X') && (*(i + 1) == 'O' ) && (*(i + 2) == 'R') && (*(i + 3) == ' ')) )
+		{
+			BinaryWord my_word = {"XOR"};
+			Token tok = {binaryOp, my_word};
+			my_equation.push_back(tok);
+			i+=4;
+		}//CONTINUE HERE
+		else if( ((*i == 'I') && (*(i + 1) == 'F')&& (*(i + 2) == ' ')) ) 
+		{
+			BinaryWord my_word = {"AND"};
+			Token tok = {binaryOp, my_word};
+			my_equation.push_back(tok);
+			i+=4;
+		}
+		else if( ((*i == 'A') && (*(i + 1) == 'N') && (*(i + 2) == 'D') && (*(i + 3) == ' ')) ) 
+		{
+			BinaryWord my_word = {"AND"};
+			Token tok = {binaryOp, my_word};
+			my_equation.push_back(tok);
+			i+=4;
+		}
+		else if( ((*i == 'A') && (*(i + 1) == 'N') && (*(i + 2) == 'D') && (*(i + 3) == ' ')) ) 
+		{
+			BinaryWord my_word = {"AND"};
+			Token tok = {binaryOp, my_word};
+			my_equation.push_back(tok);
+			i+=4;
+		}
+		else if( ((*i == 'A') && (*(i + 1) == 'N') && (*(i + 2) == 'D') && (*(i + 3) == ' ')) ) 
+		{
+			BinaryWord my_word = {"AND"};
+			Token tok = {binaryOp, my_word};
+			my_equation.push_back(tok);
+			i+=4;
+		}
 		else if ((std::islower(*i))) {
 			isVariable1 = true;
 			Variable my_variable = {i, nullptr, nullptr, nullptr};
