@@ -155,13 +155,6 @@ namespace binary
 	char * exponentiate(char * binary_expression);
 
 	/**
-	* The binary::base function evaluates a binary expression that contains the "base" operator.
-	* @param binary_expression A char * containing the base operator and an expression on either side of that operator.
-	* @return The first expression with the base of the second expression.
-	*/
-	char * base(char * binary_expression);
-
-	/**
 	* The binary::derive function computes the derivative of a derivable multi-variable expression with respect to a specified variable. If the given variable is replaced with a number, say n,the unary derivative of the expression will be taken n times.
 	* Note: A binary expression in the form "(x^2 + y^2) der 3" will throw an error because the computer does not know which variable to take the third derivative with respect to.
 	* @param binary_expression A mathematical expression containing a derivable expression, the der operator, and the variable whom we will be taking the derivative with respect to (or the number of times the derivative will be taken), in that order.
@@ -185,26 +178,6 @@ namespace binary
 	*/
 	char * derive(char * binary_expression);
 
-	/**
-	* The binary::AND function is the boolean AND operation. It only return TRUE if both the left value and the right value have been evaluated to TRUE.
-	* @param binary_expression a boolean value, the logical AND operator, and then another boolean value, in that order.
-	* @return TRUE or FALSE
-	*/
-	char * AND (char * unary_expression);
-
-	/**
-	* The binary::OR function is the boolean inclusive or operation. It only return FALSE if both the left value and the right value have been evaluated to TRUE.
-	* @param binary_expression a boolean value, the logical OR operator, and then another boolean value, in that order.
-	* @return TRUE or FALSE
-	*/
-	char * OR (char * unary_expression);
-
-	/**
-	* The binary::XOR function is the boolean exclusive or operation. It returns false if both the left and right sides evaluate to the same boolean value.
-	* @param binary_expression a boolean value, the logical XOR operator, and then another boolean value, in that order.
-	* @return TRUE or FALSE
-	*/
-	char * XOR (char * unary_expression);
 }
 /**
  * unary operators do not need an order of precedence. They stick to the expression to their right.
