@@ -19,21 +19,18 @@
  */
 
 #include "Equation_Solver.h"
-
-enum Type { start, open, closed, plusOrMinus, binaryOp, unaryOp, binaryWord
-           , constant, variable, function, bliteral
+struct Token;
+enum Type { start, open, closed, plusOrMinus, binaryOp
+           , constant, variable, function
            , intliteral, decliteral, end };
 struct Start {};
 struct Open {char name;};
 struct Closed {char name;};
 struct PlusOrMinus {char name;int numOperands;};
 struct BinaryOp {char name;};
-struct BinaryWord {std::string name;};
-struct UnaryWord {std::string name;};
 struct Constant {std::string name;std::string def;};
 struct Variable {std::string name;std::string def;};
 struct Function {std::string name;std::string def;};
-//Will use a plain bool - no struct necessary.
 struct BInt {long num; long denom; long inum; long idenom;};
 struct BDec {long double dec; long double idec;};
 struct End {};
@@ -50,7 +47,6 @@ struct Token {
     	Constant 	myConstant;
     	Variable	myVariable;
     	Function	myFunction;
-    	bool		myBool;
     	BInt		myBInt;
     	BDec		myBDec;
   	};
