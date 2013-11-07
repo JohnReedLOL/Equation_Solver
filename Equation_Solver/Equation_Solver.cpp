@@ -28,7 +28,6 @@ struct Open {char name;};
 struct Closed {char name;};
 struct PlusOrMinus {char name;int numOperands;};
 struct BinaryOp {char name;};
-struct UnaryOp {char name;};
 struct BinaryWord {std::string name;};
 struct UnaryWord {std::string name;};
 struct Constant {std::string name;std::string def;};
@@ -96,18 +95,21 @@ char * parenthesize(std::string equation) {
 			Open my_open = {*i};
 			Token open_tok = {open, my_open};
 			my_equation.push_back(start_tok);
+			++i;
 		}
 		else if(*i == ')' || *i == ']' || *i == '}')
 		{
 			Closed my_closed = {*i};
 			Token closed_tok = {closed, my_closed};
 			my_equation.push_back(closed_tok);
+			++i;
 		}
 		else if(*i == '+' || *i == '-')
 		{
 			PlusOrMinus my_pm = {*i,0};
 			Token pm_tok = {plusOrMinus, my_pm};
 			my_equation.push_back(pm_tok);
+			++i;
 		}
 		else if(*i == ',' || *i == ';' 
 		|| *i == '*' || *i == '/' || *i == '%' 
@@ -117,8 +119,15 @@ char * parenthesize(std::string equation) {
 			BinaryOp my_bi = {*i};
 			Token bi_tok = {binaryOp, my_bi};
 			my_equation.push_back(bi_tok);
+			++i;
 		}
-		else if() //CONTINUE FROM HERE
+		else if( ((*i == 'A') && (*(i + 1) == 'N') && (*(i + 2) == 'D') && (*(i + 3) == ' ')) ) 
+		{
+			BinaryWord my_word = {"AND"};
+			Token tok = {binaryOp, my_word};
+			my_equation.push_back(tok);
+			i+=4;
+		}
 		else if ((std::islower(*i))) {
 			isVariable1 = true;
 			Variable my_variable = {i, nullptr, nullptr, nullptr};
