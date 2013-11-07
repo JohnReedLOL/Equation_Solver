@@ -28,9 +28,9 @@ struct Open {char name;};
 struct Closed {char name;};
 struct PlusOrMinus {char name;int numOperands;};
 struct BinaryOp {char name;};
-struct Constant {std::string name;std::string def;};
-struct Variable {std::string name;std::string def;};
-struct Function {std::string name;std::string def;};
+struct Constant {std::string name;};
+struct Variable {std::string name;};
+struct Function {std::string name;};
 struct BInt {long num; long denom; long inum; long idenom;};
 struct BDec {long double dec; long double idec;};
 struct End {};
@@ -42,8 +42,6 @@ struct Token {
     	PlusOrMinus 	myPlusOrMinus;
     	BinaryOp 	myBinaryOp;
     	//No unary op because + - have own type.
-    	BinaryWord 	myBinaryWord;
-    	UnaryWord 	myUnaryWord;
     	Constant 	myConstant;
     	Variable	myVariable;
     	Function	myFunction;
@@ -116,48 +114,6 @@ char * parenthesize(std::string equation) {
 			Token bi_tok = {binaryOp, my_bi};
 			my_equation.push_back(bi_tok);
 			++i;
-		}
-		else if( ((*i == 'A') && (*(i + 1) == 'N') && (*(i + 2) == 'D') && (*(i + 3) == ' ')) ) 
-		{
-			BinaryWord my_word = {"AND"};
-			Token tok = {binaryOp, my_word};
-			my_equation.push_back(tok);
-			i+=4;
-		}
-		else if( ((*i == 'O') && (*(i + 1) == 'R') && (*(i + 2) == ' ')) ) 
-		{
-			BinaryWord my_word = {"OR"};
-			Token tok = {binaryOp, my_word};
-			my_equation.push_back(tok);
-			i+=3;
-		}
-		else if(((*i == 'X') && (*(i + 1) == 'O' ) && (*(i + 2) == 'R') && (*(i + 3) == ' ')) )
-		{
-			BinaryWord my_word = {"XOR"};
-			Token tok = {binaryOp, my_word};
-			my_equation.push_back(tok);
-			i+=4;
-		}
-		else if( ((*i == 'I') && (*(i + 1) == 'F')&& (*(i + 2) == ' ')) ) 
-		{
-			BinaryWord my_word = {"IF"};
-			Token tok = {binaryOp, my_word};
-			my_equation.push_back(tok);
-			i+=3;
-		}
-		else if( ((*i == 'I') && (*(i + 1) == 'F') && (*(i + 2) == 'F') && (*(i + 3) == ' ')) ) 
-		{
-			BinaryWord my_word = {"IFF"};
-			Token tok = {binaryOp, my_word};
-			my_equation.push_back(tok);
-			i+=4;
-		}
-		else if(((*i == 'N') && (*(i + 1) == 'O' ) && (*(i + 2) == 'T') && (*(i + 3) == ' ')) )
-		{
-			UnaryWord my_word = {"NOT"};
-			Token tok = {unaryOp, my_word};
-			my_equation.push_back(tok);
-			i+=4;
 		}
 		else if (std::isupper(*i) && std::islower(*(i + 1))) { //A table search must occur.
 			//AN UPPER FOLLOWED BY A LOWER COULD ALSO BE IN FORM: "Ax1 + Bx2 = 7 - Ax1"
