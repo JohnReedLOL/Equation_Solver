@@ -115,6 +115,55 @@ char * parenthesize(std::string equation) {
 			my_equation.push_back(bi_tok);
 			++i;
 		}
+		else if (*i == 'L' && *(i+1) == 'o' && *(i+2) == 'g')
+		{
+			Function my_func = {"Log"};
+			Token func_tok = {function, my_func};
+			my_equation.push_back(func_tok);
+			i+=3;
+		}
+		else if (*i == 'D' && *(i+1) == 'e' && *(i+2) == 'r')
+		{
+			Function my_func = {"Der"};
+			Token func_tok = {function, my_func};
+			my_equation.push_back(func_tok);
+			i+=3;
+		}
+		else if (*i == 'I' && *(i+1) == 'n' && *(i+2) == 't')
+		{
+			Function my_func = {"Int"};
+			Token func_tok = {function, my_func};
+			my_equation.push_back(func_tok);
+			i+=3;
+		}
+		else if (*i == 'F' && *(i+1) == 'a' && *(i+2) == 'c' && *(i+2) == 't')
+		{
+			Function my_func = {"Fact"};
+			Token func_tok = {function, my_func};
+			my_equation.push_back(func_tok);
+			i+=4;
+		}
+		else if (*i == 'S' && *(i+1) == 'i' && *(i+2) == 'n')
+		{
+			Function my_func = {"Sin"};
+			Token func_tok = {function, my_func};
+			my_equation.push_back(func_tok);
+			i+=3;
+		}
+		else if (*i == 'C' && *(i+1) == 'o' && *(i+2) == 's')
+		{
+			Function my_func = {"Cos"};
+			Token func_tok = {function, my_func};
+			my_equation.push_back(func_tok);
+			i+=3;
+		}
+		else if (*i == 'T' && *(i+1) == 'a' && *(i+2) == 'n')
+		{
+			Function my_func = {"Tan"};
+			Token func_tok = {function, my_func};
+			my_equation.push_back(func_tok);
+			i+=3;
+		}
 		else if (std::isupper(*i) && std::islower(*(i + 1))) { //A table search must occur.
 			//AN UPPER FOLLOWED BY A LOWER COULD ALSO BE IN FORM: "Ax1 + Bx2 = 7 - Ax1"
 			// Solution: 2Ax1 + Bx2 - 7 = 0;
