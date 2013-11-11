@@ -1,0 +1,39 @@
+//Zeros Algorithm:
+#include <float.h>  
+#include <iostream>
+#include <iomanip>
+using namespace std;
+
+int main ()
+{	
+    std::cout.precision(50);
+    std::cout.setf( std::ios::fixed, std::ios::floatfield ); // floatfield set to fixed
+    
+    unsigned int counter = 0;
+    const float c = 32767.0f;
+    
+    const float max = FLT_MAX;
+    const float mm = (0.0000152587890625f/64.0f);
+    const float min = -1.0f*max;
+
+    //const float diff = 0.0f + 8.0f*nextafterf(0.0f,max);
+
+    float b;
+    for(b = -32767.0f;b < c; b = nextafterf(b,max) )
+    {
+	float g=powf (b, 2.0f)-4.0f; //The equation.
+	//float g = cosf ( b );
+	if( (g < mm) && (g > -mm) )
+	//if( g==0 )
+	{
+		std::cout << b << std::endl;
+	}
+	++counter;
+    }
+std::cout << "\n" << std::endl;
+std::cout << b << std::endl;
+std::cout << "\n" << std::endl;
+std::cout << counter << std::endl;
+
+  return 0;
+}
