@@ -9,7 +9,7 @@
 const float x_begin = -32767.0f;
 const float x_end = 32767.0f;
 
-//Type the equation into this function.
+//Type the equation into this function. "powf" is "power_floating_point" for floats.
 inline float equation(float x)
 {
 	return powf(x, 2.0f)-4.0f;
