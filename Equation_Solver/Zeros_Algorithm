@@ -3,25 +3,18 @@
 
 #include <math.h>
 #include <stdio.h>
-
+#define THE_EQUATION(x) powf(x,2.0f)-4.0f
+#define THE_MAX 3.2E+32f
 //These constants determine the range for the x-values.
 const float x_begin = -32767.0f;
 const float x_end = 32767.0f;
 
-//Type the equation into this function. "powf" is "power_floating_point" for floats.
-//For list of functions, see http://www.cplusplus.com/reference/cmath/
-float equation(float x)
-{
-	return powf(x, 2.0f)-4.0f;
-}
-
 int main ()
 {    
-    const float max = 3.2E+32f;
     const float mm = 0.00024414062f;
 
     float h= x_begin;
-    float j= powf (h, 2.0f)-4.0f;
+    float j= THE_EQUATION(h) ;
 
     float k= (j < 0.0f) ? (-j) : j ;
 
@@ -30,9 +23,9 @@ int main ()
     float l;
     int hasSolution = 0; // bool
     puts("Solutions: ");
-    for(b = nextafterf(h,max);b < -0.0078125f; b = nextafterf(b,max) )
+    for(b = nextafterf(h, THE_MAX );b < -0.0078125f; b = nextafterf(b, THE_MAX ) )
     {     
-        c = equation(b);
+        c = THE_EQUATION(b);
         l = (c < 0.0f) ? (-c) : c ;
         if( k < mm )
         {
@@ -50,12 +43,12 @@ int main ()
 
 hasSolution = 0; //bool
 h = 0.0f;
-j = equation(h);
+j = THE_EQUATION(h);
 k = (j < 0.0f) ? (-j) : j ;
 
-    for(b = 0.0078125f; b < x_end; b = nextafterf(b,max) )
+    for(b = 0.0078125f; b < x_end; b = nextafterf(b, THE_MAX ) )
     {
-        c = equation(b);
+        c = THE_EQUATION(b);
         l = (c < 0.0f) ? (-c) : c ;
 
         if( k < mm )
