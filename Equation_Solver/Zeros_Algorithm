@@ -27,15 +27,16 @@ int main ()
     {     
         c = THE_EQUATION(b);
         l = (c < 0.0f) ? (-c) : c ;
-        if( k < mm )
-        {
-                if( (l>=k) && (hasSolution == 0) )
+        if( k > mm )
+        {hasSolution = 0;
+                
+        }
+        else {if( (l>=k) && (hasSolution == 0) )
                 {
                         printf("%g \n", h);
                         hasSolution = 1; //bool
                 }
-        }
-        else {hasSolution = 0;}
+              }
         k=l;
         j=c;
         h=b;
@@ -51,15 +52,16 @@ k = (j < 0.0f) ? (-j) : j ;
         c = THE_EQUATION(b);
         l = (c < 0.0f) ? (-c) : c ;
 
-        if( k < mm )
-        {
-                if( (l>=k) && (hasSolution == 0) )
+        if( k > mm )
+        {hasSolution = 0;
+                
+        }
+        else {if( (l>=k) && (hasSolution == 0) )
                 {
                         printf("%g \n", h);
                         hasSolution = 1; //bool
                 }
-        }
-        else {hasSolution = 0;}
+              }
         k=l;
         j=c;
         h=b;
