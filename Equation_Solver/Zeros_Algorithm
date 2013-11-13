@@ -1,70 +1,67 @@
-//Compile with: g++ -O3 -o tempc ~/tempc.c
-//NEXTAFTERF NOT AVAILIBLE IN OLD GCC
-
 #include <math.h>
 #include <stdio.h>
+
 #define THE_EQUATION(x) powf(x,2.0f)-4.0f
 #define THE_MAX 3.2E+32f
-//These constants determine the range for the x-values.
-const float x_begin = -32767.0f;
-const float x_end = 32767.0f;
+#define X_BEGIN -32767.0f
+#define X_END 32767.0f
+#define THRESHOLD 0.00024414062f
 
 int main ()
-{    
-    const float mm = 0.00024414062f;
-
-    float h= x_begin;
-    float j= THE_EQUATION(h) ;
-
-    float k= (j < 0.0f) ? (-j) : j ;
-
-    float b;
-    float c;
-    float l;
+{
     int hasSolution = 0; // bool
+    
+    float h= X_BEGIN;
+    float k= THE_EQUATION(h) ;
+    k= (k > 0.0f) ? k : -k ;
+    
     puts("Solutions: ");
-    for(b = nextafterf(h, THE_MAX );b < -0.0078125f; b = nextafterf(b, THE_MAX ) )
-    {     
-        c = THE_EQUATION(b);
-        l = (c < 0.0f) ? (-c) : c ;
-        if( k > mm )
-        {hasSolution = 0;
-                
+
+    for(float b = nextafterf(h, THE_MAX );b < -0.0078125f; b = nextafterf(b, THE_MAX ) )
+    {
+        float l = THE_EQUATION(b);
+        l = (l > 0.0f) ? l : -l ;
+
+        if( k > THRESHOLD )
+        {
+            hasSolution = 0;
         }
-        else {if( (l>=k) && (hasSolution == 0) )
-                {
-                        printf("%g \n", h);
-                        hasSolution = 1; //bool
-                }
-              }
-        k=l;
-        j=c;
-        h=b;
+        else 
+        {   
+            if( (l>=k) && (hasSolution == 0) )
+            {
+                    printf("%g \n", h);
+                    hasSolution = 1; //bool
+            }
+        }
+    k=l;
+    h=b;
     }
 
 hasSolution = 0; //bool
 h = 0.0f;
-j = THE_EQUATION(h);
-k = (j < 0.0f) ? (-j) : j ;
+k = THE_EQUATION(h);
+k = (k > 0.0f) ? k : -k ;
 
-    for(b = 0.0078125f; b < x_end; b = nextafterf(b, THE_MAX ) )
+    for(float b = 0.0078125f; b < X_END; b = nextafterf(b, THE_MAX ) )
     {
-        c = THE_EQUATION(b);
-        l = (c < 0.0f) ? (-c) : c ;
+        float l = THE_EQUATION(b);
+        l = (l > 0.0f) ? l : -l ;
 
-        if( k > mm )
-        {hasSolution = 0;
-                
+        if( k > THRESHOLD )
+        {
+            hasSolution = 0;
         }
-        else {if( (l>=k) && (hasSolution == 0) )
-                {
-                        printf("%g \n", h);
-                        hasSolution = 1; //bool
-                }
-              }
-        k=l;
-        j=c;
-        h=b;
+        else 
+        {   
+            if( (l>=k) && (hasSolution == 0) )
+            {
+                    printf("%g \n", h);
+                    hasSolution = 1; //bool
+            }
+        }
+    k=l;
+    h=b;
     }
 return 0;
 }
