@@ -1,8 +1,64 @@
+/* s_nextafterf.c -- float version of s_nextafter.c.
+ * Conversion to float by Ian Lance Taylor, Cygnus Support, ian@cygnus.com.
+ */
+
+/*
+ * ====================================================
+ * Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
+ *
+ * Developed at SunPro, a Sun Microsystems, Inc. business.
+ * Permission to use, copy, modify, and distribute this
+ * software is freely granted, provided that this notice
+ * is preserved.
+ * ====================================================
+ */
+
+//The below stuff is private dependencies
+
+/* We can do a few things better on x86-64.  */
+
+//#if defined __AVX__ || defined SSE2AVX
+//# define MOVD "vmovd"
+//# define MOVQ "vmovq"
+//#else
+//# define MOVD "movd"
+//# define MOVQ "movq"
+//#endif
+# define MOVD "movd"
+# define MOVQ "movq"
+
+float ____nextafterf(float x)
+{
+	//int32_t hx,hy,ix,iy;
+	int hx;
+    {							      
+    int i_;								      
+    __asm__ (MOVD " %1, %0" : "=rm" (i_) : "x" ((float) (x)));		      
+    (hx) = i_;								      
+    }
+
+	if(hx>=0) {				/* x > 0 */
+	    				/* x < y, x += ulp */
+		hx += 1;
+	} else {				/* x < 0 */
+	    				/* x < y, x -= ulp */
+		hx -= 1;
+	}
+    {									      
+    int i_ = hx;								      
+    float f__;								      
+    __asm__ (MOVD " %1, %0" : "=x" (f__) : "rm" (i_));			      
+    x = f__;								      
+    }
+	return x;
+}
+# undef MOVD
+# undef MOVQ
+
 #include <math.h>
 #include <stdio.h>
 
 #define THE_EQUATION(x) powf(x,2.0f)-4.0f
-#define THE_MAX 3.2E+32f
 #define X_BEGIN -32767.0f
 #define X_END 32767.0f
 #define THRESHOLD 0.00024414062f
@@ -10,8 +66,8 @@
 int main ()
 {
     int hasSolution = 0; // bool 
-			//h, k, b, l
-    float arr[4] = {X_BEGIN, THE_EQUATION(arr[0]), nextafterf(arr[0], THE_MAX ), THE_EQUATION(arr[2])};
+                        //h, k, b, l
+    float arr[4] = {X_BEGIN, THE_EQUATION(arr[0]), ____nextafterf(arr[0]), THE_EQUATION(arr[2])};
     
     arr[1]= (arr[1] > 0.0f) ? arr[1] : -arr[1] ;
     
@@ -35,7 +91,7 @@ int main ()
         }
     arr[1]=arr[3];
     arr[0]=arr[2];
-    arr[2] = nextafterf(arr[2], THE_MAX );
+    arr[2] = ____nextafterf(arr[2]);
     arr[3] = THE_EQUATION(arr[2]);
     }
 
@@ -66,7 +122,7 @@ arr[3] = THE_EQUATION(arr[2]);
         }
     arr[1]=arr[3];
     arr[0]=arr[2];
-    arr[2] = nextafterf(arr[2], THE_MAX );
+    arr[2] = ____nextafterf(arr[2]);
     arr[3] = THE_EQUATION(arr[2]);
     }
 
