@@ -1,6 +1,6 @@
 //Compile with: g++ -O3 -o Backbone_Algorithm ~/Backbone_Algorithm.cpp
 
-#include <cmath>
+#include <math.h>
 #include <float.h>
 #include <iostream>
 #include <iomanip>
@@ -10,6 +10,7 @@ const float x_begin = -32767.0f;
 const float x_end = 32767.0f;
 
 //Type the equation into this function. "powf" is "power_floating_point" for floats.
+//For list of functions, see http://www.cplusplus.com/reference/cmath/
 inline float equation(float x)
 {
 	return powf(x, 2.0f)-4.0f;
@@ -28,7 +29,7 @@ int main ()
     float h= x_begin;
     float j= powf (h, 2.0f)-4.0f;
 
-    float k= abs(j);
+    float k= (j < 0.0f) ? (-j) : j ;
 
     float b;
     float c;
@@ -38,7 +39,7 @@ int main ()
     for(b = nextafterf(h,max);b < -0.0078125f; b = nextafterf(b,max) )
     {     
         c = equation(b);
-        l = abs(c);
+        l = (c < 0.0f) ? (-c) : c ;
         if( k < mm )
         {
                 if( (l>=k) && (hasSolution == false) )
@@ -56,12 +57,12 @@ int main ()
 hasSolution = false;
 h = 0.0f;
 j = equation(h);
-k = abs(j);
+k = (j < 0.0f) ? (-j) : j ;
 
     for(b = 0.0078125f; b < x_end; b = nextafterf(b,max) )
     {
         c = equation(b);
-        l = abs(c);
+        l = (c < 0.0f) ? (-c) : c ;
 
         if( k < mm )
         {
