@@ -1,0 +1,74 @@
+#include <math.h>
+#include <stdio.h>
+
+#define THE_EQUATION(x) powf(x,2.0f)-4.0f
+#define THE_MAX 3.2E+32f
+#define X_BEGIN -32767.0f
+#define X_END 32767.0f
+#define THRESHOLD 0.00024414062f
+
+int main ()
+{
+    int hasSolution = 0; // bool 
+			//h, k, b, l
+    float arr[4] = {X_BEGIN, THE_EQUATION(arr[0]), nextafterf(arr[0], THE_MAX ), THE_EQUATION(arr[2])};
+    
+    arr[1]= (arr[1] > 0.0f) ? arr[1] : -arr[1] ;
+    
+    puts("Solutions: ");
+
+    while ( arr[2] < -0.0078125f )
+    {
+        arr[3] = (arr[3] > 0.0f) ? arr[3] : -arr[3] ;
+
+        if( arr[1] > THRESHOLD )
+        {
+            hasSolution = 0;
+        }
+        else 
+        {   
+            if( (arr[3]>=arr[1]) && (hasSolution == 0) )
+            {
+                    printf("%g \n", arr[0]);
+                    hasSolution = 1; //bool
+            }
+        }
+    arr[1]=arr[3];
+    arr[0]=arr[2];
+    arr[2] = nextafterf(arr[2], THE_MAX );
+    arr[3] = THE_EQUATION(arr[2]);
+    }
+
+hasSolution = 0; //bool
+arr[2] = 0.0f;
+arr[3] = THE_EQUATION(arr[2]);
+arr[3] = (arr[3] > 0.0f) ? arr[3] : -arr[3] ;
+arr[1]=arr[3];
+arr[0]= arr[2];
+arr[2] = 0.0078125f;
+arr[3] = THE_EQUATION(arr[2]);
+
+    while ( arr[2] < X_END )
+    {
+        arr[3] = (arr[3] > 0.0f) ? arr[3] : -arr[3] ;
+
+        if( arr[1] > THRESHOLD )
+        {
+            hasSolution = 0;
+        }
+        else 
+        {   
+            if( (arr[3]>=arr[1]) && (hasSolution == 0) )
+            {
+                    printf("%g \n", arr[0]);
+                    hasSolution = 1; //bool
+            }
+        }
+    arr[1]=arr[3];
+    arr[0]=arr[2];
+    arr[2] = nextafterf(arr[2], THE_MAX );
+    arr[3] = THE_EQUATION(arr[2]);
+    }
+
+return 0;
+}
