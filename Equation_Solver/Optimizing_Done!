@@ -1,3 +1,23 @@
+
+#define THE_EQUATION(x) powf(x,2.0f)-4.0f // = 0, solve for x.
+
+#define X_BEGIN -32767.0f
+#define X_END 32767.0f
+
+// float sinf (float x);         sine of an angle of x radians.
+// float expf (float x);         base-e exponential function of x
+// float atanf (float x);        arctan
+// float logf (      float x);   log base e
+// float log10f (float x);       log base 10
+// float sqrtf (float x);        square root 
+// float fabsf (float x);        absolute value
+
+// float powf (float base, float exponent);
+
+
+#define PI 3.14159265
+
+
 /*
  * ====================================================
  * Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
@@ -25,9 +45,6 @@
 #include <math.h>
 #include <stdio.h>
 
-#define THE_EQUATION(x) powf(x,2.0f)-4.0f
-#define X_BEGIN -32767.0f
-#define X_END 32767.0f
 #define THRESHOLD 0.00024414062f
 
 int main ()
