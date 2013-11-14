@@ -62,23 +62,23 @@ int main ()
     b=d;
     a=x;
    
-int hxi[2]; 
+int hx, i_; 
                                                                      
-    __asm__ (MOVD " %1, %0" : "=rm" (hxi[1]) : "x" ((float) (x)));                      
-    hxi[0] = hxi[1];                                                                      
+    __asm__ (MOVD " %1, %0" : "=rm" (i_) : "x" ((float) (x)));                      
+    hx = i_;                                                                      
     
 
-        if(hxi[0]>=0) {                                /* x > 0 */
+        if(hx>=0) {                                /* x > 0 */
                                             /* x < y, x += ulp */
-                hxi[0] += 1;
+                hx += 1;
         } else {                                /* x < 0 */
                                             /* x < y, x -= ulp */
-                hxi[0] -= 1;
+                hx -= 1;
         }
                                                                                
-    hxi[1] = hxi[0];                                                                      
+    i_ = hx;                                                                      
     float f__;                                                                      
-    __asm__ (MOVD " %1, %0" : "=x" (f__) : "rm" (hxi[1]));                              
+    __asm__ (MOVD " %1, %0" : "=x" (f__) : "rm" (i_));                              
     x = f__;           
 
     d = THE_EQUATION(x);
@@ -112,23 +112,23 @@ d = THE_EQUATION(x);
     b=d;
     a=x;
 
-int hxi[2]; 
+int hx, i_; 
                                                                      
-    __asm__ (MOVD " %1, %0" : "=rm" (hxi[1]) : "x" ((float) (x)));                      
-    hxi[0] = hxi[1];                                                                      
+    __asm__ (MOVD " %1, %0" : "=rm" (i_) : "x" ((float) (x)));                      
+    hx = i_;                                                                      
     
 
-        if(hxi[0]>=0) {                                /* x > 0 */
+        if(hx>=0) {                                /* x > 0 */
                                             /* x < y, x += ulp */
-                hxi[0] += 1;
+                hx += 1;
         } else {                                /* x < 0 */
                                             /* x < y, x -= ulp */
-                hxi[0] -= 1;
+                hx -= 1;
         }
                                                                                
-    hxi[1] = hxi[0];                                                                      
+    i_ = hx;                                                                      
     float f__;                                                                      
-    __asm__ (MOVD " %1, %0" : "=x" (f__) : "rm" (hxi[1]));                              
+    __asm__ (MOVD " %1, %0" : "=x" (f__) : "rm" (i_));                              
     x = f__;           
 
     d = THE_EQUATION(x);
