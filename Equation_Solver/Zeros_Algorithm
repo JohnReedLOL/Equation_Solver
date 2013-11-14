@@ -21,7 +21,7 @@ int main() {
 	float x0_x1_y0_y1[4] = { X_BEGIN, X_BEGIN * 1.00001525878f, F(
 			x0_x1_y0_y1[0]), F(x0_x1_y0_y1[1]) };
 	int * const x_mantissa = (int * const ) (&x0_x1_y0_y1[1]);
-	printf("Solutions: ");
+	printf("Solutions: \n");
 
 	if (x0_x1_y0_y1[2] < 0.0f)
 		x0_x1_y0_y1[2] = -x0_x1_y0_y1[2];
