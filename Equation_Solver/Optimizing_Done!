@@ -1,3 +1,4 @@
+#define PI 3.14159265
 
 #define THE_EQUATION(x) powf(x,2.0f)-4.0f // = 0, solve for x.
 
@@ -14,8 +15,6 @@
 
 // float powf (float base, float exponent);
 
-
-#define PI 3.14159265
 
 
 /*
