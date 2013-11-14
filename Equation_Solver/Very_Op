@@ -37,16 +37,15 @@ int main ()
                         //h, k, b, l
     float a = X_BEGIN;
     float b = THE_EQUATION(a);
-    float x = a + .125;
+    float x = a + .125f;
     float d = THE_EQUATION(x);
     
-    b= (b > 0.0f) ? b : -b ;
-    
+    if (b < 0.0f) b=-b;
     puts("Solutions: ");
 
     while ( x < -0.0078125f )
     {
-        d = (d > 0.0f) ? d : -d ;
+        if (d < 0.0f) d=-d;
 
         if( b > THRESHOLD )
         {
@@ -63,22 +62,24 @@ int main ()
     b=d;
     a=x;
    
-  int i_;
-  int hx; //for nextafter							      
-    __asm__ (MOVD " %1, %0" : "=rm" (i_) : "x" (x));		      
-    (hx) = i_;
+int hxi[2]; 
+                                                                     
+    __asm__ (MOVD " %1, %0" : "=rm" (hxi[1]) : "x" ((float) (x)));                      
+    hxi[0] = hxi[1];                                                                      
+    
 
-	if(hx>=0) {				/* x > 0 */
-	    				/* x < y, x += ulp */
-		hx += 1;
-	} else {				/* x < 0 */
-	    				/* x < y, x -= ulp */
-		hx -= 1;
-	}								      
-    i_ = hx;								  
-    float f__;								      
-    __asm__ (MOVD " %1, %0" : "=x" (f__) : "rm" (i_));			      
-    x = f__;
+        if(hxi[0]>=0) {                                /* x > 0 */
+                                            /* x < y, x += ulp */
+                hxi[0] += 1;
+        } else {                                /* x < 0 */
+                                            /* x < y, x -= ulp */
+                hxi[0] -= 1;
+        }
+                                                                               
+    hxi[1] = hxi[0];                                                                      
+    float f__;                                                                      
+    __asm__ (MOVD " %1, %0" : "=x" (f__) : "rm" (hxi[1]));                              
+    x = f__;           
 
     d = THE_EQUATION(x);
     }
@@ -94,7 +95,7 @@ d = THE_EQUATION(x);
 
     while ( x < X_END )
     {
-        d = (d > 0.0f) ? d : -d ;
+        if (d < 0.0f) d=-d;
 
         if( b > THRESHOLD )
         {
@@ -111,22 +112,24 @@ d = THE_EQUATION(x);
     b=d;
     a=x;
 
-  int i_;
-  int hx; //for nextafter							      
-    __asm__ (MOVD " %1, %0" : "=rm" (i_) : "x" (x));		      
-    (hx) = i_;
+int hxi[2]; 
+                                                                     
+    __asm__ (MOVD " %1, %0" : "=rm" (hxi[1]) : "x" ((float) (x)));                      
+    hxi[0] = hxi[1];                                                                      
+    
 
-	if(hx>=0) {				/* x > 0 */
-	    				/* x < y, x += ulp */
-		hx += 1;
-	} else {				/* x < 0 */
-	    				/* x < y, x -= ulp */
-		hx -= 1;
-	}								      
-    i_ = hx;								  
-    float f__;								      
-    __asm__ (MOVD " %1, %0" : "=x" (f__) : "rm" (i_));			      
-    x = f__;
+        if(hxi[0]>=0) {                                /* x > 0 */
+                                            /* x < y, x += ulp */
+                hxi[0] += 1;
+        } else {                                /* x < 0 */
+                                            /* x < y, x -= ulp */
+                hxi[0] -= 1;
+        }
+                                                                               
+    hxi[1] = hxi[0];                                                                      
+    float f__;                                                                      
+    __asm__ (MOVD " %1, %0" : "=x" (f__) : "rm" (hxi[1]));                              
+    x = f__;           
 
     d = THE_EQUATION(x);
     }
