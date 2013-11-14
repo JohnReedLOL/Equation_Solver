@@ -1,67 +1,77 @@
+#define PI 3.14159265f
+
+#define THE_EQUATION(x) powf(x,2.0f)-4.0f // f(x) = 0, solve for x.
+
+#define X_BEGIN -32767.0f //Search breadth
+#define X_END 32767.0f 
+
+#define STEP_SIZE 1 //Step size
+
+#define LEFT_PROXIMITY -0.0078125f //Closeness to zero.
+#define RIGHT_PROXIMITY 0.0078125f 
+
+#define THRESHOLD 0.00024414062f //Margin of error
+
 #include <math.h>
 #include <stdio.h>
 
-#define THE_EQUATION(x) powf(x,2.0f)-4.0f
-#define THE_MAX 3.2E+32f
-#define X_BEGIN -32767.0f
-#define X_END 32767.0f
-#define THRESHOLD 0.00024414062f
+int main() {
+	int hasSolution = 0; // C boolean value
 
-int main ()
-{
-    int hasSolution = 0; // bool
-    
-    float h= X_BEGIN;
-    float k= THE_EQUATION(h) ;
-    k= (k > 0.0f) ? k : -k ;
-    
-    puts("Solutions: ");
+	float x0_x1_y0_y1[4] = { X_BEGIN, X_BEGIN * 1.00001525878f, THE_EQUATION(
+			x0_x1_y0_y1[0]), THE_EQUATION(x0_x1_y0_y1[1]) };
+	int * const x_mantissa = (int * const ) (&x0_x1_y0_y1[1]);
+	printf("Solutions: ");
 
-    for(float b = nextafterf(h, THE_MAX );b < -0.0078125f; b = nextafterf(b, THE_MAX ) )
-    {
-        float l = THE_EQUATION(b);
-        l = (l > 0.0f) ? l : -l ;
+	if (x0_x1_y0_y1[2] < 0.0f)
+		x0_x1_y0_y1[2] = -x0_x1_y0_y1[2];
 
-        if( k > THRESHOLD )
-        {
-            hasSolution = 0;
-        }
-        else 
-        {   
-            if( (l>=k) && (hasSolution == 0) )
-            {
-                    printf("%g \n", h);
-                    hasSolution = 1; //bool
-            }
-        }
-    k=l;
-    h=b;
-    }
+	while (x0_x1_y0_y1[1] < LEFT_PROXIMITY) {
 
-hasSolution = 0; //bool
-h = 0.0f;
-k = THE_EQUATION(h);
-k = (k > 0.0f) ? k : -k ;
+		if (x0_x1_y0_y1[3] < 0.0f)
+			x0_x1_y0_y1[3] = -x0_x1_y0_y1[3];
 
-    for(float b = 0.0078125f; b < X_END; b = nextafterf(b, THE_MAX ) )
-    {
-        float l = THE_EQUATION(b);
-        l = (l > 0.0f) ? l : -l ;
+		if (x0_x1_y0_y1[2] > THRESHOLD) {
+			hasSolution = 0;
+		} else {
+			if ((x0_x1_y0_y1[3] >= x0_x1_y0_y1[2]) && (hasSolution == 0)) {
+				printf("%g \n", x0_x1_y0_y1[0]);
+				hasSolution = 1;
+			}
+		}
+		x0_x1_y0_y1[2] = x0_x1_y0_y1[3];
+		x0_x1_y0_y1[0] = x0_x1_y0_y1[1];
 
-        if( k > THRESHOLD )
-        {
-            hasSolution = 0;
-        }
-        else 
-        {   
-            if( (l>=k) && (hasSolution == 0) )
-            {
-                    printf("%g \n", h);
-                    hasSolution = 1; //bool
-            }
-        }
-    k=l;
-    h=b;
-    }
-return 0;
+		*x_mantissa -= STEP_SIZE;
+		x0_x1_y0_y1[3] = THE_EQUATION(x0_x1_y0_y1[1]);
+	}
+
+	x0_x1_y0_y1[1] = 0.0f;
+	hasSolution = 0;
+	x0_x1_y0_y1[3] = THE_EQUATION(x0_x1_y0_y1[1]);
+	if (x0_x1_y0_y1[3] < 0.0f)
+		x0_x1_y0_y1[3] = -x0_x1_y0_y1[3];
+	x0_x1_y0_y1[2] = x0_x1_y0_y1[3];
+	x0_x1_y0_y1[0] = x0_x1_y0_y1[1];
+	x0_x1_y0_y1[1] = RIGHT_PROXIMITY;
+
+	while (x0_x1_y0_y1[1] < X_END) {
+		x0_x1_y0_y1[3] = THE_EQUATION(x0_x1_y0_y1[1]);
+		if (x0_x1_y0_y1[3] < 0.0f)
+			x0_x1_y0_y1[3] = -x0_x1_y0_y1[3];
+
+		if (x0_x1_y0_y1[2] > THRESHOLD) {
+			hasSolution = 0;
+		} else {
+			if ((x0_x1_y0_y1[3] >= x0_x1_y0_y1[2]) && (hasSolution == 0)) {
+				printf("%g \n", x0_x1_y0_y1[0]);
+				hasSolution = 1;
+			}
+		}
+		x0_x1_y0_y1[2] = x0_x1_y0_y1[3];
+		x0_x1_y0_y1[0] = x0_x1_y0_y1[1];
+
+		*x_mantissa += STEP_SIZE;
+	}
+	return 0;
 }
