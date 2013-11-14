@@ -1,0 +1,135 @@
+/*
+ * ====================================================
+ * Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
+ *
+ * Developed at SunPro, a Sun Microsystems, Inc. business.
+ * Permission to use, copy, modify, and distribute this
+ * software is freely granted, provided that this notice
+ * is preserved.
+ * ====================================================
+ */
+
+/* We can do a few things better on x86-64.  */
+
+//#if defined __AVX__ || defined SSE2AVX
+//# define MOVD "vmovd"
+//# define MOVQ "vmovq"
+//#else
+//# define MOVD "movd"
+//# define MOVQ "movq"
+//#endif
+
+# define MOVD "movd"
+# define MOVQ "movq"
+
+#include <math.h>
+#include <stdio.h>
+
+#define THE_EQUATION(x) powf(x,2.0f)-4.0f
+#define X_BEGIN -32767.0f
+#define X_END 32767.0f
+#define THRESHOLD 0.00024414062f
+
+int main ()
+{
+
+    int hasSolution = 0; // bool 
+                        //h, k, b, l
+    float a = X_BEGIN;
+    float b = THE_EQUATION(a);
+    float x = a + .125;
+    float d = THE_EQUATION(x);
+    
+    b= (b > 0.0f) ? b : -b ;
+    
+    puts("Solutions: ");
+
+    while ( x < -0.0078125f )
+    {
+        d = (d > 0.0f) ? d : -d ;
+
+        if( b > THRESHOLD )
+        {
+            hasSolution = 0;
+        }
+        else 
+        {   
+            if( (d>=b) && (hasSolution == 0) )
+            {
+                    printf("%g \n", a);
+                    hasSolution = 1; //bool
+            }
+        }
+    b=d;
+    a=x;
+   
+  int i_;
+  int hx; //for nextafter							      
+    __asm__ (MOVD " %1, %0" : "=rm" (i_) : "x" (x));		      
+    (hx) = i_;
+
+	if(hx>=0) {				/* x > 0 */
+	    				/* x < y, x += ulp */
+		hx += 1;
+	} else {				/* x < 0 */
+	    				/* x < y, x -= ulp */
+		hx -= 1;
+	}								      
+    i_ = hx;								  
+    float f__;								      
+    __asm__ (MOVD " %1, %0" : "=x" (f__) : "rm" (i_));			      
+    x = f__;
+
+    d = THE_EQUATION(x);
+    }
+
+hasSolution = 0; //bool
+x = 0.0f;
+d = THE_EQUATION(x);
+d = (d > 0.0f) ? d : -d ;
+b=d;
+a= x;
+x = 0.0078125f;
+d = THE_EQUATION(x);
+
+    while ( x < X_END )
+    {
+        d = (d > 0.0f) ? d : -d ;
+
+        if( b > THRESHOLD )
+        {
+            hasSolution = 0;
+        }
+        else 
+        {   
+            if( (d>=b) && (hasSolution == 0) )
+            {
+                    printf("%g \n", a);
+                    hasSolution = 1; //bool
+            }
+        }
+    b=d;
+    a=x;
+
+  int i_;
+  int hx; //for nextafter							      
+    __asm__ (MOVD " %1, %0" : "=rm" (i_) : "x" (x));		      
+    (hx) = i_;
+
+	if(hx>=0) {				/* x > 0 */
+	    				/* x < y, x += ulp */
+		hx += 1;
+	} else {				/* x < 0 */
+	    				/* x < y, x -= ulp */
+		hx -= 1;
+	}								      
+    i_ = hx;								  
+    float f__;								      
+    __asm__ (MOVD " %1, %0" : "=x" (f__) : "rm" (i_));			      
+    x = f__;
+
+    d = THE_EQUATION(x);
+    }
+
+return 0;
+}
