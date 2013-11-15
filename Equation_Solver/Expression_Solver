@@ -1,0 +1,25 @@
+#define pi 3.14159265358979323846
+#define e  2.71828182845904523536
+
+#define X_EXPRESSION pow(2.0,2.0)+4.0 
+
+/*
+float sin (double x);         sine of an angle of x radians.
+float exp (double x);         base-e exponential function of x
+float atan (double x);        arctan
+float log (double x);   log base e
+float log10 (double x);       log base 10
+float sqrt (double x);        square root 
+float fabs (double x);        absolute value
+float pow (base, exp);
+*/
+
+#include <math.h>
+#include <stdio.h>
+int main() {
+
+double x = ( X_EXPRESSION ) ;
+printf("%g \n", x);
+
+    return 0;
+}
