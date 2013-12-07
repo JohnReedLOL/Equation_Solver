@@ -23,8 +23,8 @@
 
 
 #define THE_EQUATION(x) \
-pow(x,2.0f)-1.0f                                                                                                                                        
-                                                                                                                                                        
+x+5.0f                                                                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                                                              
 
 /* Search breadth */
 #define X_BEGIN -32767.0f
