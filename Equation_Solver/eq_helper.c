@@ -1,7 +1,7 @@
 #include <math.h>
 #include <stdio.h>
 
-#define PI 3.14159265358979323846f
+#define pi 3.14159265358979323846f
 #define e 2.71828182845904523536f
 #define pow(x,exponent) powf((x),(exponent))
 #define sqrt(x) sqrtf((x))
@@ -23,7 +23,7 @@
 
 
 #define THE_EQUATION(x) \
-x+5.0f                                                                                                                                                                                                                                                                        
+pow(sin(x)+log10(x),pi) / abs(x)                                                                                                                                                                                                                                              
                                                                                                                                                                                                                                                                               
 
 /* Search breadth */
