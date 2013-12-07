@@ -32,6 +32,7 @@ while ( ( fgets(line, 1024, eq_helper) )  && (line_counter < 25 ) )
 if( line_counter == 25 )
 {
     fputs( my_string, eq_helper );
+    fputs( "                                                                                                                 ", eq_helper );
     printf("input success. \n");
     fclose ( eq_helper );
         ++line_counter;
@@ -65,3 +66,4 @@ else
 }
 return 0;
 }
+
